@@ -271,6 +271,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.3.8)
+    rouge (4.4.0)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
@@ -377,6 +378,7 @@ DEPENDENCIES
   ostruct
   puma (>= 5.0)
   rails (~> 7.2.1)
+  rouge
   sassc-rails
   selenium-webdriver
   sprockets-rails

@@ -1,0 +1,28 @@
+<%= semantic_form_for [:admin, @post], builder: ActiveAdmin::FormBuilder do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :user %>
+    <%= f.input :title, as: :string %>
+    <%= f.input :content %>
+  <% end  %> 
+  <%= f.actions do %>
+    <li class="action input_action" id="post_submit_action">
+      <% if controller.action_name == 'edit' %>
+        <input type="submit" name="commit" value="Update Post" />
+      <% else %>
+        <input type="submit" name="commit" value="Create Post" />
+      <% end %>
+    </li>
+    <li class="action input_action" id="post_preview_action">
+      <input type="button" name="preview" value="Preview Post" />
+    </li>
+  <% end %>
+<% end %>
+
+<script>
+  $("#post_preview_action").click(async (e) => {
+    let content = $("#post_content")[0].value
+    let actionUrl = $("form.formtastic")[0].action
+    let response = await fetch(`${actionUrl}/preview_content`)
+    console.log(await response.json())
+  })
+</script>

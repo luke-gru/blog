@@ -1,0 +1,12 @@
+<div class="post my-10">
+    <div class="post-title text-xl font-semibold">
+      <% if controller.action_name == "index"  %>
+        <%= link_to post.title, post_page_path(post) %>
+      <% else %>
+        <%= post.title %>
+      <% end %>
+    </div>
+  <div class="post-author italic">By <%= post.user.display_name %></div>
+  <div class="post-time italic">Written on <%= post.user.created_at.to_date %></div>
+  <div class="post-content mt-5"><%= post.content.html_safe %></div>
+</div>

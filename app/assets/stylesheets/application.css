@@ -1,3 +1,7 @@
-*= require_self
-*= require_tree .
-@import "./actiontext.scss";
+/*= require_self */
+/*= require application.tailwind.css */
+/*= require rouge_github.css */
+
+.post-content .codehilite {
+  margin-left: 20px;
+}
