@@ -5,7 +5,7 @@
     #   form_selector (String): the form's unique selector
 %>
 <div id="editor-wrapper">
-<div class="wp-webdeasy-comment-editor">
+<div class="easy-comment-editor">
   <div class="e-toolbar">
     <div class="e-line">
 
@@ -92,9 +92,7 @@
     </div>
   </div>
   <div class="e-content-area">
-    <div class="e-visuell-view" contenteditable>
-      <%= html.html_safe %>
-    </div>
+    <div class="e-visuell-view" contenteditable><%= html.html_safe %></div>
     <textarea class="e-html-view"></textarea>
   </div>
 </div>
@@ -120,7 +118,7 @@
 
 <script>
   // define vars
-  const editor = document.getElementsByClassName('wp-webdeasy-comment-editor')[0];
+  const editor = document.getElementsByClassName('easy-comment-editor')[0];
   const toolbar = editor.getElementsByClassName('e-toolbar')[0];
   const buttons = toolbar.querySelectorAll('.editor-btn:not(.e-has-submenu)');
   const contentArea = editor.getElementsByClassName('e-content-area')[0]; // wrapper for visual and html views
@@ -169,9 +167,9 @@
       htmlView.style.display = 'none'
       visuellView.style.display = 'block'
       button.classList.remove('active');
-    } else {  // show html view
-      htmlView.innerText = visuellView.innerHTML;
-      htmlView.value = visuellView.innerHTML;
+    } else {  // show html/code view
+      <%#htmlView.innerText = visuellView.innerHTML;%>
+      htmlView.value = visuellView.innerHTML.trim();
       visuellView.style.display = 'none'
       htmlView.style.display = 'block';
       button.classList.add('active'); 
@@ -368,12 +366,13 @@
 }
 
 /* WYSIWYG Editor */
-.wp-webdeasy-comment-editor {
+.easy-comment-editor {
   width: 40rem;
   min-height: 18rem;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
   margin: 2rem 0;
+  zoom: 150%;
   
   .e-toolbar {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);

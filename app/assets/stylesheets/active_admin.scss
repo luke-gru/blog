@@ -17,3 +17,9 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+.attributes_table.post {
+  .row-content p {
+    margin-bottom: 5px;
+  }
+}

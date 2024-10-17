@@ -1,5 +1,5 @@
 ActiveAdmin.register Post do
-  permit_params :user_id, :title, :content
+  permit_params :user_id, :title, :content, :status
 
   index do
     selectable_column
@@ -7,6 +7,7 @@ ActiveAdmin.register Post do
     column :id
     column :user
     column :title
+    column :status
     column :created_at
     column :updated_at
     actions
@@ -22,11 +23,29 @@ ActiveAdmin.register Post do
         p.user.display_name
       end
       row :title
-      row :content do |p|
-        p.content
+      row :status
+      row :content do |post|
+        content = "".html_safe
+        code do
+          post.indented_content.lines.each do |line|
+            content << para { # p tag
+              p_content = "".html_safe
+              parts = line.split(/( )/)
+              parts.each do |part|
+                if part == " "
+                  p_content << "&nbsp;".html_safe
+                else
+                  p_content << part
+                end
+              end
+              p_content
+            }
+          end
+          content
+        end
       end
       row :link do |p|
-        link_to p.title, post_page_path(p)
+        link_to p.title, post_page_path(p), target: "_blank"
       end
     end
   end
@@ -39,23 +58,35 @@ ActiveAdmin.register Post do
     protected
     def set_content
       raw_content = params[:post][:content] || ''
-      # ex: ```ruby\nputs "HI"```
+      # ex: replace ```ruby\nputs "HI"``` with proper pygment HTML tags
       if m = raw_content.match(/```(\w+)\s*(.+)```/m)
         lang, code_content = m.captures
-        code_content.gsub! /<br>/, '' # trix did this
-        if lang == "ruby"
-          beg_match, end_match = m.offset(0)
-          before_content, after_content = [raw_content[0...beg_match], raw_content[end_match..-1]]
-          html_formatter = Rouge::Formatters::HTML.new
-          formatter = Rouge::Formatters::HTMLPygments.new(html_formatter, css_class='codehilite')
+        code_content.gsub! /<br>/, '' # trix used to add this, not sure if needed now
+        case lang
+        when "ruby"
           lexer = Rouge::Lexers::Ruby.new
-          code_content = formatter.format(lexer.lex(code_content))
-
-          new_content = before_content + code_content + after_content
-          nl_without_cr = /(?<!\r)\n/
-          new_content.gsub!(nl_without_cr, "\r\n")
-          params[:post][:content] = new_content
+        when "c"
+          lexer = Rouge::Lexers::C.new
+        when "js", "javascript"
+          lexer = Rouge::Lexers::Javascript.new
+        when "html"
+          lexer = Rouge::Lexers::HTML.new
+        when "css"
+          lexer = Rouge::Lexers::CSS.new
+        else
+          flash[:error] = "Unable to parse language '#{lang}'"
+          redirect_back(fallback_location: admin_post_path(id: params[:id])) and return
         end
+        beg_match, end_match = m.offset(0)
+        before_content, after_content = [raw_content[0...beg_match], raw_content[end_match..-1]]
+        html_formatter = Rouge::Formatters::HTML.new
+        formatter = Rouge::Formatters::HTMLPygments.new(html_formatter)
+        code_content = formatter.format(lexer.lex(code_content))
+
+        new_content = before_content + code_content + after_content
+        nl_without_cr = /(?<!\r)\n/
+        new_content.gsub!(nl_without_cr, "\r\n")
+        params[:post][:content] = new_content
       end
     end
   end

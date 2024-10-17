@@ -2,9 +2,10 @@
   <%= f.inputs do %>
     <%= f.input :user %>
     <%= f.input :title, as: :string %>
+    <%= f.input :status, include_blank: false %>
     <%= render :partial => 'admin/wysiwyg/editor',
       locals: {
-        html: @post.content,
+        html: @post.indented_content,
         input_name: "post[content]",
         form_selector: "form.formtastic.post",
       }

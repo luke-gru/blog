@@ -1,9 +1,13 @@
+<%# locals: post (Post) %>
 <div class="post my-10">
     <div class="post-title text-xl font-semibold">
       <% if controller.action_name == "index"  %>
         <%= link_to post.title, post_page_path(post) %>
       <% else %>
         <%= post.title %>
+      <% end %>
+      <% if !post.published? %> <%# only admins can view the post %>
+        (<%= post.status %>)
       <% end %>
     </div>
   <div class="post-author italic">By <%= post.user.display_name %></div>
