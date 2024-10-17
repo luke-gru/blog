@@ -2,7 +2,13 @@
   <%= f.inputs do %>
     <%= f.input :user %>
     <%= f.input :title, as: :string %>
-    <%= f.input :content %>
+    <%= render :partial => 'admin/wysiwyg/editor',
+      locals: {
+        html: @post.content,
+        input_name: "post[content]",
+        form_selector: "form.formtastic.post",
+      }
+      %>
   <% end  %> 
   <%= f.actions do %>
     <li class="action input_action" id="post_submit_action">

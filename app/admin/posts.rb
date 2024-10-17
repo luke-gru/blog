@@ -1,11 +1,5 @@
 ActiveAdmin.register Post do
-  class ::ActionText::RichText
-    def self.ransackable_attributes(auth_object = nil)
-      ["body", "created_at", "id", "name", "record_id", "record_type", "updated_at"]
-    end
-  end
-
-  permit_params :user, :title, :content
+  permit_params :user_id, :title, :content
 
   index do
     selectable_column
@@ -44,10 +38,11 @@ ActiveAdmin.register Post do
 
     protected
     def set_content
-      raw_content = params[:post][:content]
+      raw_content = params[:post][:content] || ''
+      # ex: ```ruby\nputs "HI"```
       if m = raw_content.match(/```(\w+)\s*(.+)```/m)
         lang, code_content = m.captures
-        code_content.gsub! /<br>/, ''
+        code_content.gsub! /<br>/, '' # trix did this
         if lang == "ruby"
           beg_match, end_match = m.offset(0)
           before_content, after_content = [raw_content[0...beg_match], raw_content[end_match..-1]]
