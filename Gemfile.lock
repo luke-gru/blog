@@ -120,6 +120,7 @@ GEM
       warden (~> 1.2.3)
     drb (2.2.1)
     erubi (1.13.0)
+    erubis (2.7.0)
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-aarch64-linux-musl)
     ffi (1.17.0-arm-linux-gnu)
@@ -372,6 +373,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   devise (~> 4.9)
+  erubis
   image_processing (~> 1.2)
   importmap-rails
   jbuilder

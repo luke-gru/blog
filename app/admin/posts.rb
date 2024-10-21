@@ -1,5 +1,5 @@
 ActiveAdmin.register Post do
-  permit_params :user_id, :title, :content, :status
+  permit_params :user_id, :title, :content, :status, :images
 
   index do
     selectable_column
@@ -47,6 +47,19 @@ ActiveAdmin.register Post do
       row :link do |p|
         link_to p.title, post_page_path(p), target: "_blank"
       end
+      row "Images (#{post.images.size})" do |p|
+        content = "".html_safe
+        if p.images.any?
+          p.images.attachments.each do |attach|
+            content << div(class: "post-image-attachment") do
+              img(src: url_for(attach), style: "max-width: 250px; max-height: 250px")
+            end.html_safe
+          end
+        else
+          content << "None"
+        end
+      end
+      content
     end
   end
 

@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   belongs_to :user
+  has_many_attached :images # activestorage
   validates :user, presence: true
   validates :title, presence: true
   validates :content, presence: true
@@ -36,5 +37,28 @@ class Post < ApplicationRecord
         node.to_s + newline
       end
     end.join
+  end
+
+  def erb_content
+    content = self.content
+    template = Erubis::Eruby.new(content, pattern: "{% %}")
+    context = Erubis::Context.new
+    context[:post] = self
+    def context.post
+      @post
+    end
+    context.extend Rails.application.routes.url_helpers
+    context.extend ActionView::RoutingUrlFor
+    def context.routes
+      Rails.application.routes
+    end
+    def context.controller
+      nil
+    end
+    def context.default_url_options
+      { only_path: true }
+    end
+    
+    template.evaluate(context)
   end
 end

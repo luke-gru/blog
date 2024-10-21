@@ -10,6 +10,8 @@
         form_selector: "form.formtastic.post",
       }
       %>
+    <%= f.label :images, "Images" %>
+    <%= f.file_field :images %><br>
   <% end  %> 
   <%= f.actions do %>
     <li class="action input_action" id="post_submit_action">
@@ -19,13 +21,14 @@
         <input type="submit" name="commit" value="Create Post" />
       <% end %>
     </li>
-    <li class="action input_action" id="post_preview_action">
-      <input type="button" name="preview" value="Preview Post" />
-    </li>
+    <%#<li class="action input_action" id="post_preview_action">%>
+      <%#<input type="button" name="preview" value="Preview Post" />%>
+    <%#</li>%>
   <% end %>
 <% end %>
 
 <script>
+  // TODO
   $("#post_preview_action").click(async (e) => {
     let content = $("#post_content")[0].value
     let actionUrl = $("form.formtastic")[0].action

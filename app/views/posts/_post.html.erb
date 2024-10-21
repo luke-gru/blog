@@ -12,5 +12,5 @@
     </div>
   <div class="post-author italic">By <%= post.user.display_name %></div>
   <div class="post-time italic">Written on <%= post.user.created_at.to_date %></div>
-  <div class="post-content mt-5"><%= post.content.html_safe %></div>
+  <div class="post-content mt-5"><%= post.erb_content.html_safe %></div>
 </div>
