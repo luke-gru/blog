@@ -1,0 +1,31 @@
+# Blog Site
+
+Priority:
+
+* French language translations:
+    - Add french translations to blog posts
+    - Add static translations
+* Add comments to posts (allow markdown, and code)
+  - Make them need to be approved
+* Add footer with subscribe form
+* Add better styling using tailwind
+    - Read about tailwind components I can use, maybe blog templates or something
+* Setup proper background jobs for
+  - emailing subscribers when new posts are written
+  - Use sidekiq (or resque if there is no dashboard for sidekiq)
+* Use rails caching
+
+Other:
+
+  Why is the url a redirect url? []
+* Add top menu and about page
+* Add unit tests
+* Fix Nokogiri::XML adding closing tags to <img>
+* Create post versions?, or last_edited and only update
+when a non-whitespace change has been made
+* Copy editor images over to our site
+* Host own fontawesome using npm
+* Fix favicons
+* activestorage (images)
+ 
+* Look into making some posts and publishing the blog with kamal and containers

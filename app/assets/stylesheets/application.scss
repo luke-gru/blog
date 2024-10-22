@@ -11,6 +11,24 @@
 }
 
 .post-tags {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.post-meta {
   margin: 2rem 0;
 }
 
+.post-title {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+#nav-lang {
+  display: flex;
+  justify-content: right;
+}
+
+#nav-lang-item-first {
+  padding-right: 10px;
+}

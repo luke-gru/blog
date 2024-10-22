@@ -1,20 +1,25 @@
 <%# locals: post (Post) %>
-<div class="post my-10">
-    <div class="post-title text-xl font-semibold">
-      <% if controller.action_name == "index"  %>
-        <%= link_to post.title, post_page_path(post) %>
-      <% else %>
-        <%= post.title %>
-      <% end %>
-      <% if !post.published? %> <%# only admins can view the post %>
-        (<%= post.status %>)
-      <% end %>
-    </div>
-  <div class="post-author italic">By <%= post.user.display_name %></div>
-  <div class="post-time italic">Written on <%= post.user.created_at.to_date %></div>
+<div class="post my-8">
+  <div class="post-title text-4xl font-semibold">
+    <% if controller.action_name == "index"  %>
+      <%= link_to post.title, post_page_path(post), class: "hover-link" %>
+    <% else %>
+      <%= post.title %>
+    <% end %>
+    <% if !post.published? %> <%# only admins can view the post %>
+      (<%= post.status %>)
+    <% end %>
+  </div>
+
   <div class="post-content mt-5">
     <%= post.erb_content.html_safe %>
   </div>
+
+  <section class="post-meta">
+    <p class="post-author italic">By <%= post.user.display_name %></p>
+    <p class="post-time italic">Written on <%= post.user.created_at.to_date %></p>
+  </section>
+
   <% tags = post.tags.to_a %>
   <% if tags.size > 0 %>
     <div class="post-tags">
