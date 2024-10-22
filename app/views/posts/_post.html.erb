@@ -19,7 +19,11 @@
   <% if tags.size > 0 %>
     <div class="post-tags">
       <% tags.each do |tag| %>
-        <a class="post-tag btn-primary" href="<%= root_path(:tag =>  tag.tag) %>"><%= tag.tag %></a>
+        <% if params[:tag].present? %>
+          <a class="post-tag btn-primary" href="<%= root_path %>"><%= tag.tag %></a>
+        <% else %>
+          <a class="post-tag btn-primary" href="<%= root_path(:tag =>  tag.tag) %>"><%= tag.tag %></a>
+        <% end %>
       <% end %>
     </div>
   <% end %>

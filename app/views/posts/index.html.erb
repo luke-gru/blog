@@ -2,6 +2,12 @@
   <form action="/">
     <input type="text" name="search" placeholder="Search" value="<%= params[:search] %>" />
     <input type="submit" class="btn-primary" />
+    <% if @tags %>
+      <%# NOTE: right now, only 1 tag can be shown here %>
+      <% @tags.each do |tag| %>
+        <a href="<%= root_path %>" class="menu-tag btn-primary"><%= tag.tag %></a>
+      <% end %>
+    <% end %>
   </form>
 </section>
 

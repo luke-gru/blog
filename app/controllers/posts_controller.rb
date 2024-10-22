@@ -4,6 +4,12 @@ class PostsController < ApplicationController
       search: params[:search],
       tag: params[:tag],
     ).to_a
+
+    if params[:tag].present?
+      @tags = @posts.flat_map(&:tags)
+    else
+      @tags = nil
+    end
   end
 
   def show
