@@ -3,6 +3,7 @@
     <%= f.input :user %>
     <%= f.input :title, as: :string %>
     <%= f.input :status, include_blank: false %>
+
     <%= render :partial => 'admin/wysiwyg/editor',
       locals: {
         html: @post.indented_content,
@@ -10,8 +11,11 @@
         form_selector: "form.formtastic.post",
       }
       %>
+
     <%= f.label :images, "Images" %>
     <%= f.file_field :images %><br>
+
+    <%= f.input :tags %>
   <% end  %> 
   <%= f.actions do %>
     <li class="action input_action" id="post_submit_action">

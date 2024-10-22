@@ -2,8 +2,10 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many_attached :images # activestorage
   validates :user, presence: true
-  validates :title, presence: true
+  validates :title, presence: true, uniqueness: true
   validates :content, presence: true
+  has_many :post_tags, dependent: :destroy
+  has_many :tags, through: :post_tags
 
   enum :status, [:draft, :published, :unpublished]
 
@@ -19,7 +21,6 @@ class Post < ApplicationRecord
     where(status: [:published])
   end
 
-  # TODO: belongs in view helper
   def content_with_wrapper
     %Q(<div id="post-content-wrapper">#{self.content}</div>)
   end
@@ -40,25 +41,8 @@ class Post < ApplicationRecord
   end
 
   def erb_content
-    content = self.content
-    template = Erubis::Eruby.new(content, pattern: "{% %}")
-    context = Erubis::Context.new
-    context[:post] = self
-    def context.post
-      @post
-    end
-    context.extend Rails.application.routes.url_helpers
-    context.extend ActionView::RoutingUrlFor
-    def context.routes
-      Rails.application.routes
-    end
-    def context.controller
-      nil
-    end
-    def context.default_url_options
-      { only_path: true }
-    end
-    
+    template = Erubis::Eruby.new(self.content, pattern: "{% %}")
+    context = MyErbContext.new(post: self)
     template.evaluate(context)
   end
 end

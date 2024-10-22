@@ -1,5 +1,5 @@
 ActiveAdmin.register Post do
-  permit_params :user_id, :title, :content, :status, :images
+  permit_params :user_id, :title, :content, :status, :images, :tag_ids => []
 
   index do
     selectable_column
@@ -46,6 +46,15 @@ ActiveAdmin.register Post do
       end
       row :link do |p|
         link_to p.title, post_page_path(p), target: "_blank"
+      end
+      row :tags do |p|
+        content = "".html_safe
+        tags = p.tags
+        tags.each_with_index do |tag, i|
+          content << link_to(tag.tag, admin_tag_path(tag))
+          content << br.html_safe unless tags[i+1].nil?
+        end
+        content
       end
       row "Images (#{post.images.size})" do |p|
         content = "".html_safe

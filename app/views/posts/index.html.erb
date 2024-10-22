@@ -1,5 +1,16 @@
+<section id="posts-search-menu" class="flex" style="justify-content: center;">
+  <form action="/">
+    <input type="text" name="search" placeholder="Search" value="<%= params[:search] %>" />
+    <input type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" />
+  </form>
+</section>
+
 <h1 class="text-4xl font-bold">Posts</h1>
 
-<% @posts.each do |post| %>
-  <%= render :partial => 'post', locals: { post: post } %>
+<% if @posts.size == 0 %>
+  <p id="posts-none-found">No posts found</p>
+<% else %>
+  <% @posts.each do |post| %>
+    <%= render :partial => 'post', locals: { post: post } %>
+  <% end %>
 <% end %>
