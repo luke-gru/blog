@@ -3,6 +3,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :trackable
   has_many :posts
+  # Devise validates the presence of password on create
   validates :email, presence: true
 
   def self.ransackable_attributes(auth_object = nil)
@@ -11,7 +12,7 @@ class User < ApplicationRecord
 
   def display_name
     if first_name?
-      "#{first_name} #{last_name}"
+      "#{first_name} #{last_name}".rstrip
     else
       email
     end

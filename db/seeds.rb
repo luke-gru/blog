@@ -11,6 +11,8 @@ User.create!(
   email: 'admin@example.com',
   password: 'password',
   password_confirmation: 'password',
-  admin: true
+  confirmed_at: 3.days.ago,
+  first_name: "Admin",
+  last_Name: "",
+  admin: true,
 ) if Rails.env.development?
-User.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

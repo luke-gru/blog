@@ -7,6 +7,10 @@ class Tag < ApplicationRecord
     ["created_at", "id", "id_value", "tag", "updated_at"]
   end
 
+  def self.ransackable_associations(auth_object = nil)
+    ["post_tags", "posts"]
+  end
+
   # for activeadmin display purposes
   def name
     tag

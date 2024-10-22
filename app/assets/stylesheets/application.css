@@ -5,3 +5,15 @@
 .post-content .codehilite {
   margin-left: 20px;
 }
+
+.post-content .highlight {
+  margin: 1rem 0;
+}
+
+.post-tags {
+  margin: 2rem 0;
+}
+
+#posts-search-menu input[type=submit] {
+  cursor: pointer;
+}

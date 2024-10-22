@@ -21,6 +21,17 @@ class Post < ApplicationRecord
     where(status: [:published])
   end
 
+  def self.recently_published(search: nil, tag: nil, most_recent: 3)
+    scope = Post.published.includes(:user, :tags)
+    if search.present?
+      scope.where!("#{table_name}.title LIKE ? OR #{table_name}.content LIKE ?", "%#{search}%", "%#{search}%")
+    end
+    if tag.present?
+      scope.where!(tags: { tag: tag })
+    end
+    scope.order("#{table_name}.created_at DESC").limit(most_recent)
+  end
+
   def content_with_wrapper
     %Q(<div id="post-content-wrapper">#{self.content}</div>)
   end

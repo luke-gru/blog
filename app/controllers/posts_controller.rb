@@ -1,11 +1,9 @@
 class PostsController < ApplicationController
   def index
-    scope = Post.published.includes(:user)
-    if params[:search].present?
-      search = params[:search]
-      scope.where!("title LIKE ? OR content LIKE ?", "%#{search}%", "%#{search}%")
-    end
-    @posts = scope.order('created_at DESC').limit(3).to_a
+    @posts = Post.recently_published(
+      search: params[:search],
+      tag: params[:tag],
+    ).to_a
   end
 
   def show
