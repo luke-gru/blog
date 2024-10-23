@@ -251,6 +251,8 @@ GEM
       i18n
     rdoc (6.7.0)
       psych (>= 4.0.0)
+    redis-client (0.22.2)
+      connection_pool
     reline (0.5.10)
       io-console (~> 0.5)
     responders (3.1.1)
@@ -270,6 +272,12 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.3.1)
+    sidekiq (7.3.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      logger
+      rack (>= 2.2.4)
+      redis-client (>= 0.22.2)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -350,6 +358,7 @@ DEPENDENCIES
   rails (~> 7.2.1)
   rouge
   sassc-rails
+  sidekiq
   sprockets-rails
   sqlite3 (>= 1.4)
   stimulus-rails

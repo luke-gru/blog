@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MyErbContext < Erubis::Context
   include Rails.application.routes.url_helpers
   # allow url_for in erb template
