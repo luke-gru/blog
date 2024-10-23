@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Rails Project" %></title>
+    <title><%= content_for(:title) || "Luke's Blog" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -26,11 +26,11 @@
   <body>
     <nav id="main-nav">
       <div id="nav-lang">
-        <a id="nav-lang-item-first" href="<%= my_current_path(:lang => :en) %>">
+        <a id="nav-lang-item-first" href="<%= my_current_path(:locale => :en) %>">
           <span class="fi fi-gb">
           </span>
         </a>
-        <a href="<%= my_current_path(:lang => :fr) %>">
+        <a href="<%= my_current_path(:locale => :fr) %>">
           <span class="fi fi-fr">
           </span>
         </a>
