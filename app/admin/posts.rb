@@ -80,35 +80,12 @@ ActiveAdmin.register Post do
     protected
     def set_content
       raw_content = params[:post][:content] || ''
-      # ex: replace ```ruby\nputs "HI"``` with proper pygment HTML tags
-      if m = raw_content.match(/```(\w+)\s*(.+)```/m)
-        lang, code_content = m.captures
-        code_content.gsub! /<br>/, '' # trix used to add this, not sure if needed now
-        case lang
-        when "ruby"
-          lexer = Rouge::Lexers::Ruby.new
-        when "c"
-          lexer = Rouge::Lexers::C.new
-        when "js", "javascript"
-          lexer = Rouge::Lexers::Javascript.new
-        when "html"
-          lexer = Rouge::Lexers::HTML.new
-        when "css"
-          lexer = Rouge::Lexers::CSS.new
-        else
-          flash[:error] = "Unable to parse language '#{lang}'"
-          redirect_back(fallback_location: admin_post_path(id: params[:id])) and return
-        end
-        beg_match, end_match = m.offset(0)
-        before_content, after_content = [raw_content[0...beg_match], raw_content[end_match..-1]]
-        html_formatter = Rouge::Formatters::HTML.new
-        formatter = Rouge::Formatters::HTMLPygments.new(html_formatter)
-        code_content = formatter.format(lexer.lex(code_content))
-
-        new_content = before_content + code_content + after_content
-        nl_without_cr = /(?<!\r)\n/
-        new_content.gsub!(nl_without_cr, "\r\n")
+      highlight = CodeHighlighting.new(raw_content)
+      if new_content = highlight.substitute_code_templates
         params[:post][:content] = new_content
+      else
+        flash[:error] = highlight.error
+        redirect_back(fallback_location: admin_post_path(id: params[:id])) and return
       end
     end
   end
