@@ -7,6 +7,10 @@ class EmailSubscription < ApplicationRecord
 
   before_validation :set_defaults, on: :create
 
+  def self.can_email
+    where(unsubscribed: false)
+  end
+
   def still_subscribed?
     not unsubscribed?
   end

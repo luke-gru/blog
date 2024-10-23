@@ -2,24 +2,25 @@
 
 Priority:
 
+* Setup proper background jobs for
+  - emailing subscribers when new posts are written [x]
+  - Preview the development emails
+  - add tests for it
+  - show flash notice for proper subscription
+  - Use hotwire for subscribe form
+  - Setup sidekiq [x]
+  - Use sidekiq with redis-server [x]
+  - See if I can use solid-queue for jobs (sqlite3)
 * French language translations:
     - Add french translations to blog posts
     - Add static translations
 * Add comments to posts (allow markdown, and code)
   - Make them need to be approved
-* Add footer with subscribe form
 * Add better styling using tailwind
     - Read about tailwind components I can use, maybe blog templates or something
-* Setup proper background jobs for
-  - emailing subscribers when new posts are written
-  - add tests for it
-  - show flash notice for proper subscription
-  - Use hotwire for subscribe form
-  - Use sidekiq with redis-server
-  - See if I can use solid-queue for jobs (sqlite3)
-  - Setup sidekiq [~]
 * Use rails caching
 * Add unit tests [~]
+* Add errors class for logging errors
 
 Other:
 

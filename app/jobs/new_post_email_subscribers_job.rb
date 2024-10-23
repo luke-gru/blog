@@ -10,8 +10,16 @@ class NewPostEmailSubscribersJob < ApplicationJob
       return
     end
     Rails.logger.info "Performing job #{self.class} for post id:#{post.id}, title: #{post.title}"
-    # TODO: deliver the mail!
-    sleep 60
+    content = post.erb_content(content: post.content_with_wrapper)
+    # TODO: use batching
+    EmailSubscription.can_email.each do |sub|
+      PostSubscriptionMailer.with(
+        post_id: post_id,
+        post_title: post.title,
+        content: content,
+        email: sub.email,
+      ).email_subscriber.deliver!
+    end
     Rails.logger.info "Done job!"
     # Do something later
   end

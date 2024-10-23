@@ -1,3 +1,11 @@
+<% if @post.errors.any? %>
+  <div class="flashes">
+    <% @post.errors.full_messages.each do |msg| %>
+      <div class="flash flash_error"><%= msg %></div>
+    <% end %>
+  </div>
+<% end %>
+
 <%= semantic_form_for [:admin, @post], builder: ActiveAdmin::FormBuilder do |f| %>
   <%= f.inputs do %>
     <%= f.input :user %>

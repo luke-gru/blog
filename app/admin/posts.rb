@@ -1,4 +1,5 @@
 ActiveAdmin.register Post do
+  # TODO: don't send locale on admin pages
   permit_params :user_id, :title, :content, :status, :images, :tag_ids => []
 
   index do
@@ -77,16 +78,32 @@ ActiveAdmin.register Post do
 
   controller do
     before_action :set_content, only: [:update]
+    before_action :remove_locale_if_set, only: [:update, :create]
 
-    protected
+    def permitted_params
+      params.permit(:utf8, :_method, :authenticity_token, :locale, :commit, :id,
+        post: [
+          :user_id, :title, :content, :status, :images, :tag_ids => [],
+        ]
+      )
+    end
+
+    private
+
     def set_content
       raw_content = params[:post][:content] || ''
       highlight = CodeHighlighting.new(raw_content)
       if (new_content = highlight.substitute_code_templates)
         params[:post][:content] = new_content
-      else
+      elsif highlight.error
         flash[:error] = highlight.error
         redirect_back(fallback_location: admin_post_path(id: params[:id])) and return
+      end
+    end
+
+    def remove_locale_if_set
+      if params[:locale]
+        params.delete(:locale)
       end
     end
   end
