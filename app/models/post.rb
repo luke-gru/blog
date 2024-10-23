@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Post < ApplicationRecord
   belongs_to :user
   has_many_attached :images # activestorage
@@ -8,6 +9,17 @@ class Post < ApplicationRecord
   has_many :tags, through: :post_tags
 
   enum :status, [:draft, :published, :unpublished]
+
+  attr_accessor :first_published_now
+
+  before_save :set_first_published_at, :if => (lambda do
+    before_published_at = changes["first_published_at"]
+    self.first_published_at.blank? && before_published_at.blank? && self.status.to_s == "published"
+  end)
+
+  after_save_commit :send_emails_to_subscribers, :if => (lambda do
+    self.first_published_now
+  end)
 
   def self.ransackable_associations(auth_object = nil)
     ["user"]
@@ -37,7 +49,7 @@ class Post < ApplicationRecord
   end
 
   # TODO: what if malformatted?
-  # @return String
+  # @return String, properly indented HTML with newlines after each tag
   def indented_content(newline: "\n")
     html = content_with_wrapper
     doc = Nokogiri::XML(html, &:noblanks)
@@ -55,5 +67,18 @@ class Post < ApplicationRecord
     template = Erubis::Eruby.new(self.content, pattern: "{% %}")
     context = MyErbContext.new(post: self)
     template.evaluate(context)
+  end
+
+  private
+
+  # callback
+  def set_first_published_at
+    self.first_published_at ||= Time.zone.now
+    self.first_published_now = true
+  end
+
+  # callback
+  def send_emails_to_subscribers
+    NewPostEmailSubscribersJob.perform_later self.id
   end
 end

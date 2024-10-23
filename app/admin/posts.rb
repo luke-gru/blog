@@ -24,6 +24,7 @@ ActiveAdmin.register Post do
       end
       row :title
       row :status
+      row :first_published_at
       row :content do |post|
         content = "".html_safe
         code do
@@ -81,7 +82,7 @@ ActiveAdmin.register Post do
     def set_content
       raw_content = params[:post][:content] || ''
       highlight = CodeHighlighting.new(raw_content)
-      if new_content = highlight.substitute_code_templates
+      if (new_content = highlight.substitute_code_templates)
         params[:post][:content] = new_content
       else
         flash[:error] = highlight.error

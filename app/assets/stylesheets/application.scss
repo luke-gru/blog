@@ -32,3 +32,19 @@
 #nav-lang-item-first {
   padding-right: 10px;
 }
+
+#nav-lang a {
+  span {
+    width: 2em;
+    height: 1.5em;
+  }
+
+  &.active {
+    opacity: 0.5;
+  }
+
+}
+
+#email-subscribe-container {
+  text-align: center;
+}

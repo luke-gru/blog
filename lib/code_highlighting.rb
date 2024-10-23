@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CodeHighlighting
   attr_reader :error
 
@@ -6,6 +7,8 @@ class CodeHighlighting
     @error = nil
   end
 
+  # FIXME: make it substitute ALL code templates, not just first
+  #
   # substitutes:
   # ```lang
   # ```
@@ -40,6 +43,8 @@ class CodeHighlighting
       nl_without_cr = /(?<!\r)\n/
       new_content.gsub!(nl_without_cr, "\r\n")
       new_content
+    else
+      @content
     end
   end
 end

@@ -49,11 +49,11 @@ group :test do
   #gem "capybara"
   #gem "selenium-webdriver"
 end
-gem "ostruct" # silence warnings
+gem "ostruct" # use the gem in order to silence warnings
 
 gem "devise", "~> 4.9"
-# TODO: change to activeadmin
 gem "activeadmin"
+gem "sidekiq"
 
 gem "sassc-rails"
 gem "tailwindcss-rails", "~> 2.7"
