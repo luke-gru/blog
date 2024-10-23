@@ -1,2 +1,2 @@
-<p>New post can be found at <%= post_page_url(id: @post_id, locale: I18n.locale) %></p>
+<p>A new post can be found <a href="<%= post_page_url(id: @post_id, locale: I18n.locale) %>" target="_blank">here</a>, or you can read it below. Enjoy the read, and thanks for subscribing!</p>
 <%= @content.html_safe %>

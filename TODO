@@ -19,7 +19,9 @@ Priority:
 * Add better styling using tailwind
     - Read about tailwind components I can use, maybe blog templates or something
 * Use rails caching
-* Add unit tests [~]
+* Add tests [~]
+  - Add test for Post#tag_ids = [1] working
+  - Add active job tests
 * Add errors class for logging errors
 
 Other:
