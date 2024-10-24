@@ -20,7 +20,7 @@ class PostsController < ApplicationController
     unless @post
       redirect_to(root_path) and return
     end
-    if !@post.published? || !(current_user && current_user.admin?)
+    if !@post.published? && (current_user.blank? || !current_user.admin?)
       redirect_to(root_path) and return
     end
   end

@@ -2,9 +2,9 @@
 
 Priority:
 
-* Add some tests (model,controller,jobs,mailer) tests
+* Add some tests (controller,jobs,mailer) tests
 
-* Test sidekiq confirmation email is sent (deliver_later!)
+* Test sidekiq confirmation email is sent (with deliver_later!)
 
 * Show EmailSubscriptions in admin dashboard, allow to resend confirmation email
 

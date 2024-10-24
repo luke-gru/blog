@@ -4,3 +4,8 @@ draft_no_tags:
   content: "content"
   status: "draft"
 
+first_published:
+  user: luke_admin
+  title: "My First Post"
+  content: "content"
+  status: "published"
