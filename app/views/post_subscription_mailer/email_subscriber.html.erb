@@ -1,2 +1,6 @@
-<p>A new post can be found <a href="<%= post_page_url(id: @post_id, locale: I18n.locale) %>" target="_blank">here</a>, or you can read it below. Enjoy the read, and thanks for subscribing!</p>
+<p>A new post can be found <a href="<%= post_page_url(id: @post_id, locale: @locale) %>" target="_blank">here</a>, or you can read it below. Enjoy the read, and thanks for subscribing!</p>
 <%= @content.html_safe %>
+
+<footer>
+  <p>If you wish, you can unsubscribe by clicking <a href="<%= posts_unsubscribe_url(token: @unsubscribe_token, locale: @locale) %>">here</a></p>
+</footer>

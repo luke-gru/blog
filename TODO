@@ -2,14 +2,16 @@
 
 Priority:
 
+* Confirm email subscription so there's no spamming
+  - test sidekiq confirmation email is sent
+* email subscription unsubscribe
+  - create route [x]
+  - create action [x]
+  - display posts#index view with flash [x]
+  - Put unsubscribe link in new post emails
+
 * Setup proper background jobs for
-  - emailing subscribers when new posts are written [x]
-  - Preview the development emails
-  - add tests for it
-  - show flash notice for proper subscription
   - Use hotwire for subscribe form
-  - Setup sidekiq [x]
-  - Use sidekiq with redis-server [x]
   - See if I can use solid-queue for jobs (sqlite3)
 * French language translations:
     - Add french translations to blog posts
@@ -24,6 +26,9 @@ Priority:
   - Add active job tests
 * Add errors class for logging errors
 
+* Get editor working with chroma-highlight for css colors
+* Get nvim indenting working properly, it messes up
+
 Other:
 
   Why is the url a redirect url? []
@@ -32,7 +37,7 @@ Other:
 * Create post versions?, or last_edited and only update
 when a non-whitespace change has been made
 * Copy editor images over to our site
-* Host own fontawesome using npm
+* Host own fontawesome using npm and flag-icons too
 * Fix favicons
 * activestorage (images)
  

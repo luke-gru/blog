@@ -16,7 +16,10 @@ class NewPostEmailSubscribersJob < ApplicationJob
       PostSubscriptionMailer.with(
         post_id: post_id,
         post_title: post.title,
+        # TODO: render content on a sub.locale basis (content_fr)
         content: content,
+        unsubscribe_token: sub.unsubscribe_token,
+        locale: sub.locale,
         email: sub.email,
       ).email_subscriber.deliver!
     end
