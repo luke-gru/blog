@@ -38,22 +38,20 @@ class PostsController < ApplicationController
     end
     # Otherwise, subscribe them again since they're now unsubscribed
     if sub
-      sub.update!(
-        unsubscribed: false,
-        last_subscribe_action: Time.zone.now,
-        confirmed_at: nil,
-      )
-      # We don't regenerate the token or re-send the email to avoid spamming people
+      sub.resubscribe!
+      # We don't regenerate the token or re-send the email to avoid spamming someone if they
+      # use another person's email address
       flash[:notice] = "Check your email for the confirmation link we sent you last time and use this link to confirm your subscription."
     # new subscriber
     else
-      sub = EmailSubscription.new(
+      sub = EmailSubscription.create!(
         email: email,
         last_subscribe_action: Time.zone.now,
         locale: I18n.locale,
       )
-      sub.save!
-      PostSubscriptionConfirmationMailer.with(sub_id: sub.id).confirmation_email.deliver_later!
+      PostSubscriptionConfirmationMailer.with(
+        sub_id: sub.id
+      ).confirmation_email.deliver_later!
       flash[:notice] = "You've successfully been added to the email list. Please check your email to confirm it's you."
     end
     redirect_back(fallback_location: posts_page_path)
@@ -71,10 +69,7 @@ class PostsController < ApplicationController
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
-    sub.update!(
-      last_subscribe_action: Time.zone.now,
-      unsubscribed: true,
-    )
+    sub.unsubscribe!
     flash[:notice] = "You've successfully been unsubscribed."
     redirect_to(posts_page_path) and return
   end
@@ -91,10 +86,7 @@ class PostsController < ApplicationController
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
-    sub.update!(
-      confirmed_at: Time.zone.now,
-      unsubscribed: false,
-    )
+    sub.confirm!
     flash[:notice] = "Confirmation success."
     redirect_to(posts_page_path) and return
   end

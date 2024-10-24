@@ -2,13 +2,11 @@
 
 Priority:
 
-* Confirm email subscription so there's no spamming
-  - test sidekiq confirmation email is sent
-* email subscription unsubscribe
-  - create route [x]
-  - create action [x]
-  - display posts#index view with flash [x]
-  - Put unsubscribe link in new post emails
+* Add some tests (model,controller,jobs,mailer) tests
+
+* Test sidekiq confirmation email is sent (deliver_later!)
+
+* Show EmailSubscriptions in admin dashboard, allow to resend confirmation email
 
 * Setup proper background jobs for
   - Use hotwire for subscribe form
