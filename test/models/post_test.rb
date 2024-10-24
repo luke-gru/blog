@@ -63,6 +63,7 @@ TMPL
     p.save!
     p = Post.find(p.id)
     assert_equal 2, p.tags.size
+    assert_equal 2, p.post_tags.size
   end
 
   private
