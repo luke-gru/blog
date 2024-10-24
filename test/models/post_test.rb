@@ -55,6 +55,16 @@ TMPL
     refute post.first_published_now
   end
 
+  def test_post_set_tag_ids
+    tag1 = tags(:ruby)
+    tag2 = tags(:programming)
+    p = posts(:draft_no_tags)
+    p.tag_ids = [tag1.id, tag2.id]
+    p.save!
+    p = Post.find(p.id)
+    assert_equal 2, p.tags.size
+  end
+
   private
 
   def create_post!(title: "title", content: "post content!", status: "draft")
