@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EmailSubscription < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :unsubscribe_token, presence: true

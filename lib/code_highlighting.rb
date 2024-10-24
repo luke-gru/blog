@@ -47,7 +47,7 @@ class CodeHighlighting
         nl_without_cr = /(?<!\r)\n/
         new_content.gsub!(nl_without_cr, "\r\n")
         content_buf << new_content
-        cursor = cursor[end_match_code+3..-1]
+        cursor = cursor[end_match_code+3..-1] # +3 for ```
         break if cursor.empty?
       else
         break
