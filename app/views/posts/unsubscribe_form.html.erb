@@ -1,0 +1,11 @@
+<div id="unsub-form-container" class="my-8">
+  <%= form_with url: posts_unsubscribe_path(token: @sub.unsubscribe_token), method: :post do |f| %>
+    <div>
+      <%= f.label :reason, "Reason (optional)" %>
+    </div>
+    <%= f.text_area :reason %>
+    <div>
+      <%= f.submit "Unsubscribe", class: "btn-primary" %>
+    </div>
+  <% end %>
+</div>

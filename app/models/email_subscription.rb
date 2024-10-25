@@ -27,10 +27,11 @@ class EmailSubscription < ApplicationRecord
     where.not(email_subscriptions: { confirmed_at: nil })
   end
 
-  def unsubscribe!
+  def unsubscribe!(reason: nil)
     update!(
       last_subscribe_action: Time.zone.now,
       unsubscribed: true,
+      unsubscribe_reason: reason,
     )
   end
 

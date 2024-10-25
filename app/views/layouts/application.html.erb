@@ -57,13 +57,15 @@
     </main>
 
     <footer>
-      <div id="email-subscribe-container">
-        <p id="email-subscribe-text">Receive an email when a new post has been made</p>
-        <%= form_with(url: posts_subscribe_url) do |f| %>
-          <%= f.email_field :subscribe_email, required: true, placeholder: "my@email.com" %>
-          <%= f.submit "Subscribe", class: "btn-primary" %>
-        <% end %>
-      </div>
+      <% unless defined?(@skip_footer_subscribe_form) && @skip_footer_subscribe_form %>
+        <div id="email-subscribe-container">
+          <p id="email-subscribe-text">Receive an email when a new post has been made</p>
+          <%= form_with(url: posts_subscribe_url) do |f| %>
+            <%= f.email_field :subscribe_email, required: true, placeholder: "my@email.com" %>
+            <%= f.submit "Subscribe", class: "btn-primary" %>
+          <% end %>
+        </div>
+      <% end %>
     </footer>
 
   </body>

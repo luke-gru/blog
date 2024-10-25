@@ -25,6 +25,7 @@ class PostsController < ApplicationController
     end
   end
 
+  # TODO: move to different controller (EmailSubscriptions)
   # @params :subscribe_email
   def subscribe
     email = params[:subscribe_email].to_s.strip.downcase
@@ -59,6 +60,27 @@ class PostsController < ApplicationController
   end
 
   # @params :token
+  def unsubscribe_form
+    token = params[:token].presence
+    unless token
+      flash[:error] = "Invalid token."
+      redirect_to(posts_page_path) and return
+    end
+    @sub = EmailSubscription.where(unsubscribe_token: token).last
+    unless @sub
+      flash[:error] = "Cannot find a subscription with this token."
+      redirect_to(posts_page_path) and return
+    end
+    if @sub.unsubscribed?
+      flash.now[:notice] = "You are already unsubscribed"
+    end
+    @skip_footer_subscribe_form = true
+  end
+
+
+  # TODO: move to different controller (EmailSubscriptions)
+  # POST
+  # @params :token, :reason
   def unsubscribe
     token = params[:token].presence
     unless token
@@ -70,11 +92,13 @@ class PostsController < ApplicationController
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
-    sub.unsubscribe!
+    sub.unsubscribe!(reason: params[:reason])
     flash[:notice] = "You've successfully been unsubscribed."
     redirect_to(posts_page_path) and return
   end
 
+  # TODO: move to different controller (EmailSubscriptions)
+  # GET
   # @params :token
   def subscribe_confirm
     token = params[:token].presence

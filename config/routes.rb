@@ -12,8 +12,9 @@ Rails.application.routes.draw do
     root to: "posts#index"
     get  "posts", to: "posts#index", as: :posts_page
     post "posts/subscribe", to: "posts#subscribe", as: :posts_subscribe
-    get  "posts/unsubscribe", to: "posts#unsubscribe", as: :posts_unsubscribe
-    get  "posts/subscribe-confirm", to: "posts#subscribe_confirm", as: :posts_subscribe_confirm
+    get  "posts/unsubscribe-form/:token", to: "posts#unsubscribe_form", as: :posts_unsubscribe_form
+    post "posts/unsubscribe/:token", to: "posts#unsubscribe", as: :posts_unsubscribe
+    get  "posts/subscribe-confirm/:token", to: "posts#subscribe_confirm", as: :posts_subscribe_confirm
     get  "posts/:id", to: "posts#show", as: :post_page
   end
 
