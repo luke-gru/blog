@@ -21,6 +21,7 @@ class CodeHighlighting
       if m = cursor.match(/```(\w+)\s*(.+?)```/m)
         lang, code_content = m.captures
         code_content.gsub! /<br>/, '' # trix used to add this, not sure if needed now
+        lang = lang.downcase
         lexer = case lang
         when "ruby"
           Rouge::Lexers::Ruby.new
