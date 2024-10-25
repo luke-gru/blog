@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register EmailSubscription do
+  menu priority: 20
   index do
     selectable_column
     id_column

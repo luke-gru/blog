@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register Tag do
+  menu priority: 30
   permit_params :tag
 
   show do

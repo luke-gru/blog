@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register Post do
+  menu priority: 10
   # TODO: don't send locale on admin pages
   permit_params :user_id, :title, :content, :status, :images, :tag_ids => []
 
