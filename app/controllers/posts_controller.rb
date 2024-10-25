@@ -51,7 +51,7 @@ class PostsController < ApplicationController
         last_subscribe_action: Time.zone.now,
         locale: I18n.locale,
       )
-      PostSubscriptionConfirmationMailer.with(
+      SubscriptionConfirmationMailer.with(
         sub_id: sub.id
       ).confirmation_email.deliver_later!
       flash[:notice] = "You've successfully been added to the email list. Please check your email to confirm it's you."

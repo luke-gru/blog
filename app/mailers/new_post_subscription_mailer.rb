@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PostSubscriptionMailer < ApplicationMailer
+class NewPostSubscriptionMailer < ApplicationMailer
   layout "post_mailer"
 
   def email_subscriber

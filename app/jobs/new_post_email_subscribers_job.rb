@@ -13,7 +13,7 @@ class NewPostEmailSubscribersJob < ApplicationJob
     content = post.erb_content(content: post.content_with_wrapper)
     # TODO: use batching
     EmailSubscription.can_email.each do |sub|
-      PostSubscriptionMailer.with(
+      NewPostSubscriptionMailer.with(
         post_id: post_id,
         post_title: post.title,
         # TODO: render content on a sub.locale basis (content_fr)

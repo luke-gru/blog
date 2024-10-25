@@ -69,7 +69,7 @@ class EmailSubscription < ApplicationRecord
     result = {}
     sub_id = self.id
     if !inline
-      PostSubscriptionConfirmationMailer.with(
+      SubscriptionConfirmationMailer.with(
         sub_id: sub_id
       ).confirmation_email.deliver_later!
       result[:success] = true
@@ -77,7 +77,7 @@ class EmailSubscription < ApplicationRecord
     end
     begin
       Timeout.timeout(inline_timeout) do
-        PostSubscriptionConfirmationMailer.with(
+        SubscriptionConfirmationMailer.with(
           sub_id: sub_id
         ).confirmation_email.deliver!
       end

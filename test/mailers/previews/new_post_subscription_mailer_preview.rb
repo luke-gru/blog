@@ -1,5 +1,5 @@
 # Preview all emails at http://localhost:3000/rails/mailers/post_subscription_mailer
-class PostSubscriptionMailerPreview < ActionMailer::Preview
+class NewPostSubscriptionMailerPreview < ActionMailer::Preview
   def email_subscriber
     post = Post.find_by_id(3)
     post = Post.last unless post
@@ -8,7 +8,7 @@ class PostSubscriptionMailerPreview < ActionMailer::Preview
     if !sub
       sub = EmailSubscription.last
     end
-    PostSubscriptionMailer.with(
+    NewPostSubscriptionMailer.with(
       post_id: post.id,
       post_title: post.title,
       content: content,

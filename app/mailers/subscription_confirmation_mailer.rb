@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PostSubscriptionConfirmationMailer < ApplicationMailer
+class SubscriptionConfirmationMailer < ApplicationMailer
   layout "mailer"
 
   def confirmation_email
