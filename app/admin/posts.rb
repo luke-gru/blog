@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ActiveAdmin.register Post do
   # TODO: don't send locale on admin pages
   permit_params :user_id, :title, :content, :status, :images, :tag_ids => []
@@ -5,7 +6,6 @@ ActiveAdmin.register Post do
   index do
     selectable_column
     id_column
-    column :id
     column :user
     column :title
     column :status
@@ -81,7 +81,7 @@ ActiveAdmin.register Post do
     before_action :remove_locale_if_set, only: [:update, :create]
 
     def permitted_params
-      params.permit(:utf8, :_method, :authenticity_token, :locale, :commit, :id,
+      params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
         post: [
           :user_id, :title, :content, :status, :images, :tag_ids => [],
         ]
