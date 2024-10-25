@@ -13,7 +13,28 @@ ActiveAdmin.register EmailSubscription do
     actions
   end
 
+
   form do |f|
+
+    # errors for non-shown form values
+    if flash[:error].blank?
+      only_allow_update_fields = [:email, :locale]
+      bad_keys = resource.errors.messages.keys.select { |key| !only_allow_update_fields.include?(key) }
+      if resource.errors.any? && bad_keys.any?
+        div class: "flashes" do
+          div class: "flash_error" do
+            content = "".html_safe
+            bad_keys.each do |key|
+              content << para {
+                key.to_s.humanize + " " + resource.errors.messages[key].join(", ")
+              }
+            end
+            content
+          end
+        end
+      end
+    end
+
     f.inputs do
       f.input :email, as: :string, input_html: { readonly: true }
       f.input :locale
@@ -42,6 +63,8 @@ ActiveAdmin.register EmailSubscription do
   end
 
   controller do
+    protected
+
     def permitted_params
       params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
         email_subscription: [

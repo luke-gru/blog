@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register Tag do
   menu priority: 30
-  permit_params :tag
 
   show do
     attributes_table_for(resource) do
@@ -17,6 +16,18 @@ ActiveAdmin.register Tag do
       end
       row :created_at
       row :updated_at
+    end
+  end
+
+  controller do
+    protected
+
+    def permitted_params
+      params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
+        tag: [
+          :tag,
+        ]
+      )
     end
   end
 end

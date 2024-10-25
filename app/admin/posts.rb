@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register Post do
   menu priority: 10
-  # TODO: don't send locale on admin pages
-  permit_params :user_id, :title, :content, :status, :images, :tag_ids => []
 
   index do
     selectable_column
@@ -79,7 +77,6 @@ ActiveAdmin.register Post do
 
   controller do
     before_action :set_content, only: [:update]
-    before_action :remove_locale_if_set, only: [:update, :create]
 
     def permitted_params
       params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
@@ -98,13 +95,7 @@ ActiveAdmin.register Post do
         params[:post][:content] = new_content
       elsif highlight.error
         flash[:error] = highlight.error
-        redirect_back(fallback_location: admin_post_path(id: params[:id])) and return
-      end
-    end
-
-    def remove_locale_if_set
-      if params[:locale]
-        params.delete(:locale)
+        redirect_back(fallback_location: admin_post_path(id: params[:id]))
       end
     end
   end

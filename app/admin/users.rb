@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 ActiveAdmin.register User do
   menu priority: 40
-  permit_params :email, :password, :password_confirmation, :first_name, :last_name, :admin
 
   index do
     selectable_column
@@ -32,6 +31,15 @@ ActiveAdmin.register User do
     before_action :clean_params, only: :update
 
     protected
+
+    def permitted_params
+      params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
+        user: [
+          :email, :password, :password_confirmation, :first_name, :last_name, :admin
+        ]
+      )
+    end
+
     def clean_params
       if params[:user][:password].blank?
         params[:user].delete(:password)
