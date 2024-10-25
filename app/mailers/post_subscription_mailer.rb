@@ -12,17 +12,18 @@ class PostSubscriptionMailer < ApplicationMailer
     email = params[:email]
 
     subject = "New post: #{@post_title}"
+    result = mail(to: email, subject: subject)
     email_sent = SubscriptionEmailSent.new(
       post_id: @post_id,
       email_subscription_id: sub_id,
       to: email,
       subject: subject,
-      content: @content,
+      content: result.body,
       locale: @locale,
     )
     unless email_sent.save
       Rails.logger.error "Error saving SubscriptionEmailSent: #{email_sent.errors.full_messages.join(', ')}"
     end
-    mail(to: email, subject: subject)
+    result
   end
 end

@@ -6,7 +6,6 @@ class SubscriptionEmailSent < ApplicationRecord
   belongs_to :email_subscription
 
   validates :to, presence: true
-  # TODO: have the content display the FULL email, not just the content of the template
   validates :content, presence: true
 
   def self.ransackable_associations(auth_object = nil)
