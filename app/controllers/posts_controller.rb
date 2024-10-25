@@ -8,7 +8,7 @@ class PostsController < ApplicationController
     ).to_a
 
     if params[:tag].present?
-      @tags = @posts.flat_map(&:tags)
+      @tags = Tag.where(tag: params[:tag]).to_a
     else
       @tags = nil
     end
@@ -18,10 +18,10 @@ class PostsController < ApplicationController
   def show
     @post = Post.find_by_id(params[:id])
     unless @post
-      redirect_to(root_path) and return
+      redirect_to(posts_page_path) and return
     end
     if !@post.published? && (current_user.blank? || !current_user.admin?)
-      redirect_to(root_path) and return
+      redirect_to(posts_page_path) and return
     end
   end
 
