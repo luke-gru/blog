@@ -8,8 +8,21 @@ class PostSubscriptionMailer < ApplicationMailer
     @content = params[:content]
     @unsubscribe_token = params[:unsubscribe_token]
     @locale = params[:locale].presence || I18n.locale
+    sub_id = params[:sub_id]
     email = params[:email]
 
-    mail(to: email, subject: "New post: #{@post_title}")
+    subject = "New post: #{@post_title}"
+    email_sent = SubscriptionEmailSent.new(
+      post_id: @post_id,
+      email_subscription_id: sub_id,
+      to: email,
+      subject: subject,
+      content: @content,
+      locale: @locale,
+    )
+    unless email_sent.save
+      Rails.logger.error "Error saving SubscriptionEmailSent: #{email_sent.errors.full_messages.join(', ')}"
+    end
+    mail(to: email, subject: subject)
   end
 end

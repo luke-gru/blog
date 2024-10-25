@@ -6,7 +6,7 @@ class NewPostEmailSubscribersJob < ApplicationJob
     post_id = args.first
     post = Post.find_by_id(post_id)
     unless post
-      Rails.logger.error "Job couldn't find post with id of #{post_id}"
+      Rails.logger.error "Job couldn't find post with id of '#{post_id}'"
       return
     end
     Rails.logger.info "Performing job #{self.class} for post id:#{post.id}, title: #{post.title}"
@@ -18,6 +18,7 @@ class NewPostEmailSubscribersJob < ApplicationJob
         post_title: post.title,
         # TODO: render content on a sub.locale basis (content_fr)
         content: content,
+        sub_id: sub.id,
         unsubscribe_token: sub.unsubscribe_token,
         locale: sub.locale,
         email: sub.email,

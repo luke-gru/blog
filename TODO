@@ -2,15 +2,11 @@
 
 Priority:
 
-* Add some tests (controller,jobs,mailer) tests
+* Add job tests
 
-* Test sidekiq confirmation email is sent (with deliver_later!)
-
-* Show EmailSubscriptions in admin dashboard, allow to resend confirmation email
-
-* Setup proper background jobs for
-  - Use hotwire for subscribe form
+* Setup proper background jobs
   - See if I can use solid-queue for jobs (sqlite3)
+  - Test sidekiq confirmation email is sent (with deliver_later!)
 * French language translations:
     - Add french translations to blog posts
     - Add static translations
@@ -19,17 +15,11 @@ Priority:
 * Add better styling using tailwind
     - Read about tailwind components I can use, maybe blog templates or something
 * Use rails caching
-* Add tests [~]
-  - Add test for Post#tag_ids = [1] working
-  - Add active job tests
-* Add errors class for logging errors
-
-* Get editor working with chroma-highlight for css colors
-* Get nvim indenting working properly, it messes up
+* Add errors table for logging errors
 
 Other:
 
-  Why is the url a redirect url? []
+* Why is image attachment url a redirect url? []
 * Add top menu and about page
 * Fix Nokogiri::XML adding closing tags to <img>
 * Create post versions?, or last_edited and only update
@@ -37,6 +27,7 @@ when a non-whitespace change has been made
 * Copy editor images over to our site
 * Host own fontawesome using npm and flag-icons too
 * Fix favicons
-* activestorage (images)
  
 * Look into making some posts and publishing the blog with kamal and containers
+
+Dev Environment:

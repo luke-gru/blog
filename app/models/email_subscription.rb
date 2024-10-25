@@ -1,18 +1,24 @@
 # frozen_string_literal: true
 class EmailSubscription < ApplicationRecord
+  has_many :emails_sent, class_name: "SubscriptionEmailSent"
+
+  has_secure_token :unsubscribe_token, length: 50
+  has_secure_token :confirmation_token, length: 50
+
   validates :email, presence: true, uniqueness: true
   validates :unsubscribe_token, presence: true
   validates :confirmation_token, presence: true
   validates :unsubscribed, inclusion: [true, false]
   validates :locale, inclusion: I18n.available_locales.map(&:to_s) + ["",nil]
 
-  has_secure_token :unsubscribe_token, length: 50
-  has_secure_token :confirmation_token, length: 50
-
   before_validation :set_defaults, on: :create
 
   def self.ransackable_attributes(auth_object = nil)
     ["confirmation_token", "confirmed_at", "created_at", "email", "id", "id_value", "last_subscribe_action", "last_unsubscribe_action", "locale", "unsubscribe_reason", "unsubscribe_token", "unsubscribed", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["emails_sent"]
   end
 
   def self.can_email
@@ -29,9 +35,9 @@ class EmailSubscription < ApplicationRecord
 
   def unsubscribe!(reason: nil)
     update!(
-      last_subscribe_action: Time.zone.now,
       unsubscribed: true,
       unsubscribe_reason: reason,
+      last_subscribe_action: Time.zone.now,
     )
   end
 

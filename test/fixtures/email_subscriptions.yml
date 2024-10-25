@@ -1,0 +1,8 @@
+reader_confirmed_email:
+  email: "confirmed@reader.com"
+  confirmed_at: <%= Time.zone.now - 1.day %>
+  locale: "en"
+  confirmation_token: "confirm"
+  unsubscribe_token: "unsub"
+  
+  

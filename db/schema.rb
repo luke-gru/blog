@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_24_160041) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_25_185117) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -99,6 +99,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_160041) do
     t.integer "status", default: 0, null: false
     t.datetime "first_published_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "subscription_emails_sent", force: :cascade do |t|
+    t.integer "post_id"
+    t.integer "email_subscription_id"
+    t.string "to", null: false
+    t.text "subject"
+    t.text "content", null: false
+    t.string "locale"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_subscription_id"], name: "index_subscription_emails_sent_on_email_subscription_id"
+    t.index ["post_id"], name: "index_subscription_emails_sent_on_post_id"
+    t.index ["to"], name: "index_subscription_emails_sent_on_to"
   end
 
   create_table "tags", force: :cascade do |t|

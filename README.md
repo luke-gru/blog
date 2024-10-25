@@ -7,14 +7,14 @@
 * redis-server >= 6.2.0 (for background jobs)
 * sqlite3
 
-## Dev dependencies:
+## Development dependencies:
 
 All server dependencies, plus:
 
 * nodejs
 * npm
 
-## Setup:
+## Development Setup:
 
 * `$ bundle`
 * `$ bin/rails db:setup`
