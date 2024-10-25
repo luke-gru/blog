@@ -11,6 +11,10 @@ class EmailSubscription < ApplicationRecord
 
   before_validation :set_defaults, on: :create
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["confirmation_token", "confirmed_at", "created_at", "email", "id", "id_value", "last_subscribe_action", "last_unsubscribe_action", "locale", "unsubscribe_reason", "unsubscribe_token", "unsubscribed", "updated_at"]
+  end
+
   def self.can_email
     confirmed.still_subscribed
   end
@@ -51,6 +55,34 @@ class EmailSubscription < ApplicationRecord
 
   def confirmed?
     confirmed_at.present?
+  end
+
+  # @return Hash
+  def resend_confirmation_email!(inline: true, inline_timeout: 20)
+    result = {}
+    sub_id = self.id
+    if !inline
+      PostSubscriptionConfirmationMailer.with(
+        sub_id: sub_id
+      ).confirmation_email.deliver_later!
+      result[:success] = true
+      return result
+    end
+    begin
+      Timeout.timeout(inline_timeout) do
+        PostSubscriptionConfirmationMailer.with(
+          sub_id: sub_id
+        ).confirmation_email.deliver!
+      end
+    rescue Timeout::Error => e
+      result[:error] = "#{e.class}: #{e.message}. Warning: The email MAY have been sent."
+      return result
+    rescue => e # other delivery errors
+      result[:error] = "#{e.class}: #{e.message}. Warning: The email MAY have been sent."
+      return result
+    end
+    result[:success] = true
+    result
   end
 
   private
