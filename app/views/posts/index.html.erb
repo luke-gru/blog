@@ -1,11 +1,13 @@
 <section id="posts-search-menu" class="flex" style="justify-content: center;">
-  <form action="/">
+  <form action="<%= posts_page_path %>" method="get">
     <input type="text" name="search" placeholder="Search" value="<%= params[:search] %>" />
+    <%# TODO: csrf token %>
     <input type="submit" class="btn-primary" />
     <% if @tags %>
       <%# NOTE: right now, only 1 tag can be shown here %>
       <% @tags.each do |tag| %>
-        <a href="<%= root_path %>" class="menu-tag btn-primary"><%= tag.tag %></a>
+        <%# click to disable search on tag %>
+        <a href="<%= posts_page_path %>" class="menu-tag btn-primary"><%= tag.tag %></a>
       <% end %>
     <% end %>
   </form>
