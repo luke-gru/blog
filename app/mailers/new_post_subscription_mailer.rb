@@ -22,7 +22,7 @@ class NewPostSubscriptionMailer < ApplicationMailer
       locale: @locale,
     )
     unless email_sent.save
-      Rails.logger.error "Error saving SubscriptionEmailSent: #{email_sent.errors.full_messages.join(', ')}"
+      Rails.logger.error "mailer #{self.class}: error saving SubscriptionEmailSent: #{email_sent.errors.full_messages.join(', ')}"
     end
     result
   end

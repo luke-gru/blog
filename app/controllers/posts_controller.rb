@@ -18,9 +18,11 @@ class PostsController < ApplicationController
   def show
     @post = Post.find_by_id(params[:id])
     unless @post
+      Rails.logger.info "No post with this id"
       redirect_to(posts_page_path) and return
     end
     if !@post.published? && (current_user.blank? || !current_user.admin?)
+      Rails.logger.info "Post not published, no access"
       redirect_to(posts_page_path) and return
     end
   end
@@ -40,12 +42,14 @@ class PostsController < ApplicationController
     end
     # Otherwise, subscribe them again since they're now unsubscribed
     if sub
+      Rails.logger.info "Resubscribing EmailSubscription id:#{sub.id}"
       sub.resubscribe!
       # We don't regenerate the token or re-send the email to avoid spamming someone if they
       # use another person's email address
       flash[:notice] = "Check your email for the confirmation link we sent you last time and use this link to confirm your subscription."
     # new subscriber
     else
+      Rails.logger.info "Subscribing email '#{email}'"
       sub = EmailSubscription.create!(
         email: email,
         last_subscribe_action: Time.zone.now,
@@ -63,15 +67,18 @@ class PostsController < ApplicationController
   def unsubscribe_form
     token = params[:token].presence
     unless token
+      Rails.logger.info "Token empty"
       flash[:error] = "Invalid token."
       redirect_to(posts_page_path) and return
     end
     @sub = EmailSubscription.where(unsubscribe_token: token).last
     unless @sub
+      Rails.logger.info "No sub with this token"
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
     if @sub.unsubscribed?
+      Rails.logger.info "subscription already unsubbed"
       flash.now[:notice] = "You are already unsubscribed"
     end
     @skip_footer_subscribe_form = true
@@ -84,14 +91,17 @@ class PostsController < ApplicationController
   def unsubscribe
     token = params[:token].presence
     unless token
+      Rails.logger.info "Token empty"
       flash[:error] = "Invalid token."
       redirect_to(posts_page_path) and return
     end
     sub = EmailSubscription.where(unsubscribe_token: token).last
     unless sub
+      Rails.logger.info "No sub with this token"
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
+    Rails.logger.info "Unsubbing EmailSubscription id:#{sub.id}"
     sub.unsubscribe!(reason: params[:reason])
     flash[:notice] = "You've successfully been unsubscribed."
     redirect_to(posts_page_path) and return
@@ -103,15 +113,18 @@ class PostsController < ApplicationController
   def subscribe_confirm
     token = params[:token].presence
     unless token
+      Rails.logger.info "Empty token"
       flash[:error] = "Invalid token."
       redirect_to(posts_page_path) and return
     end
     sub = EmailSubscription.where(confirmation_token: token).last
     unless sub
+      Rails.logger.info "No sub with this token"
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
     sub.confirm!
+    Rails.logger.info "Confirmation success"
     flash[:notice] = "Confirmation success."
     redirect_to(posts_page_path) and return
   end

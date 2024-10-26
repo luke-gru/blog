@@ -6,13 +6,13 @@ class SubscriptionConfirmationMailer < ApplicationMailer
     sub_id = params[:sub_id]
     sub = EmailSubscription.find_by_id(sub_id)
     unless sub
-      # TODO: log error and return
+      Rails.logger.error "mailer #{self.class} couldn't find EmailSubscription id: '#{sub_id}'"
       return
     end
     @locale = sub.locale.presence || I18n.default_locale.to_s
     @confirmation_token = sub.confirmation_token
     if @confirmation_token.blank?
-      Rails.logger.error "Subscription #{sub.id} has a blank token? from: #{__method__}"
+      Rails.logger.error "EmailSubscription #{sub.id} has a blank confirmation token? from: #{__method__}"
       raise "Subscription #{sub.id} has a blank token?"
     end
     email = sub.email

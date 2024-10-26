@@ -5,7 +5,7 @@ class NewPostEmailSubscribersJobTest < ActiveJob::TestCase
     post = posts(:draft_no_tags)
     post.status = "published"
     assert_enqueued_with(job: NewPostEmailSubscribersJob) do
-      post.save
+      post.save!
     end
   end
 
@@ -13,8 +13,8 @@ class NewPostEmailSubscribersJobTest < ActiveJob::TestCase
     post = posts(:draft_no_tags)
     sub = email_subscriptions(:reader_confirmed_email)
     post.status = "published"
-    post.save
-    assert_difference "SubscriptionEmailSent.count" do
+    post.save!
+    assert_difference "SubscriptionEmailSent.count", 1 do
       perform_enqueued_jobs
     end
 
