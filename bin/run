@@ -14,16 +14,19 @@ function _cmd {
 }
 
 function exec {
-    _cmd exec $CONTAINER "${@}"
+  _cmd exec $CONTAINER "${@}"
 }
 
 function console {
-    exec bin/rails c
+  exec bin/rails c
 }
 
+function tail {
+  exec tail -f log/development.log
+}
 
 function shell {
-    exec sh
+  exec sh
 }
 
 function default {
@@ -31,9 +34,9 @@ function default {
 }
 
 function help {
-    echo "$0 <task> <args>"
-    echo "Tasks:"
-    compgen -A function | grep -v "^_" | cat -n
+  echo "$0 <task> <args>"
+  echo "Tasks:"
+  compgen -A function | grep -v "^_" | cat -n
 }
 
 TIMEFORMAT="Task completed in %3lR"

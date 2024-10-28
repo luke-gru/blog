@@ -1,3 +1,4 @@
+# https://www.digitalocean.com/community/tutorials/containerizing-a-ruby-on-rails-application-for-development-with-docker-compose
 services:
   app:
     build:
@@ -9,7 +10,7 @@ services:
     ports: 
       - "3000:3000"
     volumes:
-      - .:/rails
+      - .:/rails # bind-mount the current directory to the /rails directory (https://docs.docker.com/engine/storage/bind-mounts/)
       # when updating gems, remember to delete this volume before recreating this service
       - gem_cache:/usr/local/bundle/gems
       #- node_modules:/rails/node_modules
@@ -35,5 +36,7 @@ services:
       RAILS_ENV: development
     entrypoint: ./docker/sidekiq_entrypoint_dev.sh
 
+# persist these volumes across service stop/start
 volumes:
+  # so we don't need to bundle install and download everything each time
   gem_cache:
