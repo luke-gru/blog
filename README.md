@@ -9,16 +9,12 @@
 
 ## Development dependencies:
 
-All server dependencies, plus:
-
-* nodejs
-* npm
+All server dependencies
 
 ## Development Setup:
 
 * `$ bundle`
 * `$ bin/rails db:setup`
-* `$ npm install`
 
 Start rails server:
 
@@ -42,3 +38,29 @@ or, using Procfile, start everything (but can't use debugger on the server anymo
 
 go to localhost:3000/admin, and sign in. Take a look at `db/seeds.rb`
 for login information.
+
+## Development using docker
+
+Alternatively you can use the docker setup in docker-compose-dev.yml:
+
+Specify redis host in .env file:
+REDIS_HOST=redis
+
+To start all services:
+
+`$ docker compose up -d`
+
+You still need to run `bin/rails tailwindcss:watch`. This doesn't need to be run
+from the container, as there's a docker bind-mount b/t the 2 directories
+
+To watch the server logs and allow using debugger on the app server:
+
+Find webapp docker container id
+> docker ps | grep server_ent | awk '{ print $1 }'
+> docker attach THIS_ID
+
+To detach: <CTRL-p> <CTRL-q>
+
+Use bin/run to run commands in the docker webapp container, ex: `./bin/run console`
+If you get permissions errors, make sure a docker group has been created and setup.
+

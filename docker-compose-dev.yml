@@ -9,6 +9,9 @@ services:
       - redis
     ports: 
       - "3000:3000"
+    # allow using debugger on the web app server
+    stdin_open: true
+    tty: true
     volumes:
       - .:/rails # bind-mount the current directory to the /rails directory (https://docs.docker.com/engine/storage/bind-mounts/)
       # when updating gems, remember to delete this volume before recreating this service

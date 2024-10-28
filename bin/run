@@ -5,8 +5,8 @@
 CONTAINER="${CONTAINER:-app}"
 
 function _dc {
-  echo "sudo docker compose -f ./docker-compose-dev.yml" "${@}"
-  sudo docker compose -f ./docker-compose-dev.yml "${@}"
+  echo "docker compose -f ./docker-compose-dev.yml" "${@}"
+  docker compose -f ./docker-compose-dev.yml "${@}"
 }
 
 function _cmd {
