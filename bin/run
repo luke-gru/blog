@@ -1,0 +1,40 @@
+#!/bin/env bash
+
+# Run in docker development application environment
+
+CONTAINER="${CONTAINER:-app}"
+
+function _dc {
+  echo "sudo docker compose -f ./docker-compose-dev.yml" "${@}"
+  sudo docker compose -f ./docker-compose-dev.yml "${@}"
+}
+
+function _cmd {
+  _dc "${@}"
+}
+
+function exec {
+    _cmd exec $CONTAINER "${@}"
+}
+
+function console {
+    exec bin/rails c
+}
+
+
+function shell {
+    exec sh
+}
+
+function default {
+  shell
+}
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | grep -v "^_" | cat -n
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-default}

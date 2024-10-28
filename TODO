@@ -2,19 +2,30 @@
 
 Priority:
 
+Docker:
+  - Run docker locally for ruby and app
+  - Add sqlite docker or another container (redis maybe) and have them talk to each other
+  - Run postgres in development mode and dump all data from sqlite into postgres
+
+Docker host:
+  - Setup firewall rules to secure server
+  - Install docker [x]
+  - Setup application with ruby docker
+
+
 * Add job tests
+* Use rails caching
+* French language translations:
+    - Add french translations to blog posts
+    - Add static translations
 
 * Setup proper background jobs
   - See if I can use solid-queue for jobs (sqlite3)
   - Test sidekiq confirmation email is sent (with deliver_later!)
-* French language translations:
-    - Add french translations to blog posts
-    - Add static translations
 * Add comments to posts (allow markdown, and code)
   - Make them need to be approved
 * Add better styling using tailwind
     - Read about tailwind components I can use, maybe blog templates or something
-* Use rails caching
 * Add errors table for logging errors
 
 Other:

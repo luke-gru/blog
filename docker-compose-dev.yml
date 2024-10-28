@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      #- database
+      - redis
+    ports: 
+      - "3000:3000"
+    volumes:
+      - .:/rails
+      # when updating gems, remember to delete this volume before recreating this service
+      - gem_cache:/usr/local/bundle/gems
+      #- node_modules:/rails/node_modules
+    env_file: .env
+    environment:
+      RAILS_ENV: development
+
+  redis:
+    image: redis:7.4.1
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - app
+      - redis
+    volumes:
+      - .:/rails
+      - gem_cache:/usr/local/bundle/gems
+    env_file: .env
+    environment:
+      RAILS_ENV: development
+    entrypoint: ./docker/sidekiq_entrypoint_dev.sh
+
+volumes:
+  gem_cache:
