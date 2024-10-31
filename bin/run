@@ -9,12 +9,12 @@ function _dc {
   docker compose -f ./docker-compose-dev.yml "${@}"
 }
 
-function _cmd {
+function cmd {
   _dc "${@}"
 }
 
 function exec {
-  _cmd exec $CONTAINER "${@}"
+  cmd exec $CONTAINER "${@}"
 }
 
 function console {
@@ -27,6 +27,14 @@ function tail {
 
 function shell {
   exec sh
+}
+
+function up {
+  cmd up "${@}"
+}
+
+function stop {
+  cmd stop
 }
 
 function default {

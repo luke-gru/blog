@@ -6,6 +6,7 @@
 * ruby >= 3.2, older versions might work (untested)
 * redis-server >= 6.2.0 (for background jobs)
 * sqlite3
+* Nodejs + npm
 
 ## Development dependencies:
 
@@ -58,6 +59,9 @@ To watch the server logs and allow using debugger on the app server:
 Find webapp docker container id
 > docker ps | grep server_ent | awk '{ print $1 }'
 > docker attach THIS_ID
+
+Put them together:
+> docker attach $(docker ps | grep server_ent | awk '{ print $1 }')
 
 To detach: <CTRL-p> <CTRL-q>
 

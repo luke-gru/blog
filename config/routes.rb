@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/admin/sidekiq', as: :sidekiq_dashboard
   end
 
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
+
   scope ':locale', constraints: { locale: /en|fr/ } do
     root to: "posts#index"
     get  "posts", to: "posts#index", as: :posts_page

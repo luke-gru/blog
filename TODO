@@ -3,8 +3,8 @@
 Priority:
 
 Docker:
-  - Run docker locally for ruby and app
-  - Add sqlite docker or another container (redis maybe) and have them talk to each other
+  - Run docker locally for ruby and app [x]
+  - Add sqlite docker or another container (redis maybe) and have them talk to each other [x]
   - Run postgres in development mode and dump all data from sqlite into postgres
 
 Docker host:

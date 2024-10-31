@@ -25,8 +25,7 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -49,6 +48,10 @@ group :test do
   #gem "capybara"
   #gem "selenium-webdriver"
 end
+
+group :deployment do
+  gem "kamal"
+end
 gem "ostruct" # use the gem in order to silence warnings
 
 gem "devise", "~> 4.9"
@@ -57,7 +60,7 @@ gem "sidekiq"
 
 gem "sassc-rails"
 gem "tailwindcss-rails", "~> 2.7"
-gem "cssbundling-rails"
+#gem "cssbundling-rails"
 
 gem "rouge" # syntax highlighting code for blog posts
 gem "erubis"
