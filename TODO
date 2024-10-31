@@ -2,15 +2,16 @@
 
 Priority:
 
-Docker:
+Docker (development env):
   - Run docker locally for ruby and app [x]
   - Add sqlite docker or another container (redis maybe) and have them talk to each other [x]
   - Run postgres in development mode and dump all data from sqlite into postgres
 
-Docker host:
+Docker (production env):
   - Setup firewall rules to secure server
   - Install docker [x]
-  - Setup application with ruby docker
+  - Setup web application with kamal [x]
+  - Setup other services and have them talk to each other []
 
 
 * Add job tests
