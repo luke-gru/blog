@@ -7,12 +7,11 @@ class CodeHighlighting
     @error = nil
   end
 
-  # FIXME: make it substitute ALL code templates, not just first
-  #
   # substitutes:
   # ```lang
+  # code here
   # ```
-  # with HTML with specific highlighting classes
+  # with HTML that has specific highlighting classes
   def substitute_code_templates
     cursor = @content
     content_buf = []
@@ -33,6 +32,18 @@ class CodeHighlighting
           Rouge::Lexers::HTML.new
         when "css"
           Rouge::Lexers::CSS.new
+        when "yaml", "yml"
+          Rouge::Lexers::YAML.new
+        when "json"
+          Rouge::Lexers::JSON.new
+        when "erb"
+          Rouge::Lexers::ERB.new
+        when "make"
+          Rouge::Lexers::Make.new
+        when "shell", "bash", "sh"
+          Rouge::Lexers::Shell.new
+        when "docker"
+          Rouge::Lexers::Docker.new
         else
           @error = "Unable to parse language '#{lang}'"
           return
