@@ -11,7 +11,10 @@ Docker (production env):
   - Setup firewall rules to secure server
   - Install docker [x]
   - Setup web application with kamal [x]
-  - Setup other services and have them talk to each other []
+  - Setup other services and have them talk to each other [x]
+  - get SSL working []
+
+- setup domain to point to server
 
 
 * Add job tests

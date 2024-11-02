@@ -3,7 +3,7 @@ class MyErbContext < Erubis::Context
   include Rails.application.routes.url_helpers
   # allow url_for in erb template
   include ActionView::RoutingUrlFor
-  
+
   def initialize(vars = {})
     super()
     vars.each do |var, val|
