@@ -15,11 +15,13 @@ servers:
       - 139.177.197.129
     cmd: bundle exec sidekiq
 
+# Right now custom SSL certificates are not supported.
+# See https://github.com/basecamp/kamal/pull/969
 # Enable SSL auto certification via Let's Encrypt (and allow for multiple apps on one server).
 # If using something like Cloudflare, it is recommended to set encryption mode
 # in Cloudflare's SSL/TLS setting to "Full" to enable end-to-end encryption.
 proxy:
-  ssl: false
+  ssl: true
   host: luke-gru.net
   # kamal-proxy connects to your container over port 80, use `app_port` to specify a different port.
   app_port: 3000
