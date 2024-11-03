@@ -66,8 +66,12 @@ aliases:
 
 # Use a different ssh user than root
 #
-# ssh:
-#   user: app
+ssh:
+  #user: my-blog
+  port: "2221"
+  keys_only: true
+  keys: [ "~/.ssh/linode_key" ]
+  config: false
 
 # Use a persistent storage volume.
 #
