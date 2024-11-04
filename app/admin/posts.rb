@@ -22,30 +22,21 @@ ActiveAdmin.register Post do
       row :user do |p|
         p.user.display_name
       end
-      row :title
+      row "Title (EN)" do |p|
+        p.title
+      end
+      row "Title (FR)" do |p|
+        p.title_fr
+      end
       row :status
       row :first_published_at
-      row :content do |post|
-        content = "".html_safe
-        code do
-          post.indented_content.lines.each do |line|
-            content << para { # p tag
-              p_content = "".html_safe
-              parts = line.split(/( )/)
-              parts.each do |part|
-                if part == " "
-                  p_content << "&nbsp;".html_safe
-                else
-                  p_content << part
-                end
-              end
-              p_content
-            }
-          end
-          content
-        end
+      row "Content (EN)" do |p|
+        post_content_code_block(self, p)
       end
-      row :link do |p|
+      row "Content (FR)" do |p|
+        post_content_code_block(self, p, lang: "fr")
+      end
+      row "Link to page" do |p|
         link_to p.title, post_page_path(p), target: "_blank"
       end
       row :tags do |p|
@@ -76,12 +67,13 @@ ActiveAdmin.register Post do
   form partial: 'form'
 
   controller do
+    helper "active_admin/view"
     before_action :set_content, only: [:update]
 
     def permitted_params
       params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
         post: [
-          :user_id, :title, :content, :status, :images, :tag_ids => [],
+          :user_id, :title, :title_fr, :content, :content_fr_duplicate, :content_fr, :status, :images, :tag_ids => [],
         ]
       )
     end

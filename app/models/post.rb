@@ -13,10 +13,15 @@ class Post < ApplicationRecord
   enum :status, [:draft, :published, :unpublished]
 
   attr_accessor :first_published_now
+  attr_accessor :content_fr_duplicate # for active admin form
 
-  before_save :set_first_published_at, :if => (lambda do
+  before_save :set_first_published_at, if: (lambda do
     before_published_at = changes["first_published_at"]
     self.first_published_at.blank? && before_published_at.blank? && self.status.to_s == "published"
+  end)
+
+  before_save :set_content_fr_defaults, if: (lambda do
+    self.content_fr_duplicate && self.content_fr.blank?
   end)
 
   after_save_commit :send_emails_to_subscribers, :if => (lambda do
@@ -28,7 +33,7 @@ class Post < ApplicationRecord
   end
 
   def self.ransackable_attributes(*)
-    ["content", "created_at", "id", "title", "updated_at", "user_id"]
+    ["content", "content_fr", "content_fr_duplicate", "created_at", "id", "title", "title_fr", "updated_at", "user_id"]
   end
 
   def self.published
@@ -46,14 +51,15 @@ class Post < ApplicationRecord
     scope.order("#{table_name}.created_at DESC").limit(most_recent)
   end
 
-  def content_with_wrapper
-    %Q(<div id="post-content-wrapper">#{self.content}</div>)
+  def content_with_wrapper(lang: "en")
+    content = lang == "fr" ? self.content_fr : self.content
+    %Q(<div id="post-content-wrapper">#{content}</div>)
   end
 
   # TODO: what if malformatted?
   # @return String, properly indented HTML with newlines after each tag
-  def indented_content(newline: "\n")
-    html = content_with_wrapper
+  def indented_content(lang: "en", newline: "\n")
+    html = content_with_wrapper(lang: lang)
     doc = Nokogiri::XML(html, &:noblanks)
     doc.css("#post-content-wrapper").children.map do |node|
       if node.node_name == "div" && node.attributes["class"]&.value == "highlight"
@@ -78,6 +84,10 @@ class Post < ApplicationRecord
   def set_first_published_at
     self.first_published_at ||= Time.zone.now
     self.first_published_now = true
+  end
+
+  def set_content_fr_defaults
+    self.content_fr = self.content
   end
 
   # callback

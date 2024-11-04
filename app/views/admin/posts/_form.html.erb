@@ -9,19 +9,46 @@
 <%= semantic_form_for [:admin, @post], builder: ActiveAdmin::FormBuilder do |f| %>
   <%= f.inputs do %>
     <%= f.input :user %>
-    <%= f.input :title, as: :string %>
+    <%= f.input :title, as: :string, label: "Title (EN)" %>
+    <%= f.input :title_fr, as: :string, label: "Title (FR)" %>
     <%= f.input :status, include_blank: false %>
+
+    <li class="string input">
+      <%= f.label "content", "Content (EN)", class: "label" %>
+    </li>
 
     <%= render :partial => 'admin/wysiwyg/editor',
       locals: {
         html: @post.indented_content,
         input_name: "post[content]",
         form_selector: "form.formtastic.post",
+        lang: "en",
       }
-      %>
+    %>
 
-    <%= f.label :images, "Images" %>
-    <%= f.file_field :images %><br>
+    <% if @post.content_fr.blank? %>
+      <div class="content-duplicate-fr">
+        <%= f.label :content_fr_duplicate, "Duplicate content to French?" %>
+        <%= f.check_box :content_fr_duplicate %>
+      </div>
+    <% else %>
+      <li class="string input">
+        <%= f.label "content_fr", "Content (FR)", class: "label" %>
+      </li>
+      <%= render :partial => 'admin/wysiwyg/editor',
+        locals: {
+          html: @post.indented_content(lang: "fr"),
+          input_name: "post[content_fr]",
+          form_selector: "form.formtastic.post",
+          lang: "fr",
+        }
+      %>
+    <% end %>
+
+    <li class="input">
+      <%= f.label :images, "Images" %>
+      <%= f.file_field :images %><br>
+    </li>
 
     <%= f.input :tags %>
   <% end  %> 

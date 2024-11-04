@@ -349,5 +349,14 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   # config.use_webpacker = true
-end
+  if ENV["ADMIN_BASIC_NAME"].blank? || ENV["ADMIN_BASIC_PASS"].blank?
+    $stderr.puts "ADMIN_BASIC_NAME and ADMIN_BASIC_PASS must bet set!"
+    exit 1
+  end
 
+  config.before_action do
+    authenticate_or_request_with_http_basic("Admin") do |name, password|
+      name == ENV["ADMIN_BASIC_NAME"] && password == ENV["ADMIN_BASIC_PASS"]
+    end
+  end
+end

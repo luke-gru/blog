@@ -3,61 +3,62 @@
     #   html (String): html for the editor textarea, ex: '<div>Hello, world!</div>
     #   input_name (String): the editor form input, ex: 'post[content]'
     #   form_selector (String): the form's unique selector
+    #   lang (String): en or fr
 %>
-<div id="editor-wrapper">
-<div class="easy-comment-editor">
-  <div class="e-toolbar">
-    <div class="e-line">
+<div class="editor-wrapper">
+<div class="easy-comment-editor easy-comment-editor-<%= lang %>">
+  <div class="e-toolbar e-toolbar-<%= lang %>">
+    <div class="e-line e-line-<%= lang %>">
 
       <div class="e-box">
-        <span class="editor-btn e-icon e-smaller" data-action="bold" data-tag-name="b" title="Bold">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="bold" data-tag-name="b" title="Bold">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/bold.png"/>
         </span>
-        <span class="editor-btn e-icon e-smaller" data-action="italic" data-tag-name="i" title="Italic">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="italic" data-tag-name="i" title="Italic">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/italic.png"/>
         </span>
-        <span class="editor-btn e-icon e-smaller" data-action="underline" data-tag-name="u" title="Underline">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="underline" data-tag-name="u" title="Underline">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/underline.png"/>
         </span>
-        <span class="editor-btn e-icon e-smaller" data-action="strikeThrough" data-tag-name="strike" title="Strike through">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="strikeThrough" data-tag-name="strike" title="Strike through">
           <img src="https://img.icons8.com/fluency-systems-filled/30/000000/strikethrough.png"/>
         </span>
       </div>
 
       <div class="e-box">
-        <span class="editor-btn e-icon e-has-submenu">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-has-submenu">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-left.png"/>
           <div class="e-submenu">
-            <span class="editor-btn e-icon" data-action="justifyLeft" data-style="textAlign:left" title="Justify left">
+            <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="justifyLeft" data-style="textAlign:left" title="Justify left">
               <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-left.png"/>
             </span>
-            <span class="editor-btn e-icon" data-action="justifyCenter" data-style="textAlign:center" title="Justify center">
+            <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="justifyCenter" data-style="textAlign:center" title="Justify center">
               <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-center.png"/>
             </span>
-            <span class="editor-btn e-icon" data-action="justifyRight" data-style="textAlign:right" title="Justify right">
+            <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="justifyRight" data-style="textAlign:right" title="Justify right">
               <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-right.png"/>
             </span>
-            <span class="editor-btn e-icon" data-action="formatBlock" data-style="textAlign:justify" title="Justify block">
+            <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="formatBlock" data-style="textAlign:justify" title="Justify block">
               <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-justify.png"/>
             </span>
           </div>
         </span>
-        <span class="editor-btn e-icon" data-action="insertOrderedList" data-tag-name="ol" title="Insert ordered list">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="insertOrderedList" data-tag-name="ol" title="Insert ordered list">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/numbered-list.png"/>
         </span>
-        <span class="editor-btn e-icon" data-action="insertUnorderedList" data-tag-name="ul" title="Insert unordered list">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="insertUnorderedList" data-tag-name="ul" title="Insert unordered list">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/bulleted-list.png"/>
         </span>
-        <span class="editor-btn e-icon" data-action="outdent" title="Outdent" data-required-tag="li">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="outdent" title="Outdent" data-required-tag="li">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/outdent.png"/>
         </span>
-        <span class="editor-btn e-icon" data-action="indent" title="Indent">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="indent" title="Indent">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/indent.png"/>
         </span>
 
       </div>
       <div class="e-box">
-        <span class="editor-btn e-icon" data-action="insertHorizontalRule" title="Insert horizontal rule">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="insertHorizontalRule" title="Insert horizontal rule">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/horizontal-line.png"/>
         </span>
       </div>
@@ -66,65 +67,66 @@
     <div class="e-line">
 
       <div class="e-box">
-        <span class="editor-btn e-icon e-smaller" data-action="undo" title="Undo">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="undo" title="Undo">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/undo--v1.png"/>
         </span>
-        <span class="editor-btn e-icon" data-action="removeFormat" title="Remove format">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="removeFormat" title="Remove format">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/remove-format.png"/>
         </span>
       </div>
 
       <div class="e-box">
-        <span class="editor-btn e-icon e-smaller" data-action="createLink" title="Insert Link">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="createLink" title="Insert Link">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/add-link.png"/>
         </span>
-        <span class="editor-btn e-icon e-smaller" data-action="unlink" data-tag-name="a" title="Unlink">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon e-smaller" data-action="unlink" data-tag-name="a" title="Unlink">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/delete-link.png"/>
         </span>
       </div>
 
       <div class="e-box">
-        <span class="editor-btn e-icon" data-action="toggle-view" title="Show HTML-Code">
+        <span class="editor-btn editor-btn-<%= lang %> e-icon" data-action="toggle-view" title="Show HTML-Code">
           <img src="https://img.icons8.com/fluency-systems-filled/48/000000/source-code.png"/>
         </span>
       </div>
 
     </div>
   </div>
-  <div class="e-content-area">
-    <div class="e-visuell-view" contenteditable><%= html.html_safe %></div>
-    <textarea class="e-html-view"></textarea>
+  <div class="e-content-area e-content-area-<%= lang %>">
+    <div class="e-visuell-view e-visuell-view-<%= lang %>" contenteditable><%= html.html_safe %></div>
+    <textarea class="e-html-view e-html-view-<%= lang %>"></textarea>
   </div>
 </div>
 </div>
 
 <input type="hidden" value="" name="<%= input_name %>" />
 
-<div class="e-modal">
+<div class="e-modal e-modal-<%= lang %>">
   <div class="e-modal-bg"></div>
   <div class="e-modal-wrapper">
     <div class="e-close">✖</div>
-    <div class="e-modal-content" id="modalCreateLink">
+    <div class="e-modal-content">
       <h3>Insert Link</h3>
-      <input type="text" id="linkValue" placeholder="Link (example: https://webdeasy.de/)">
+      <input type="text" class="linkValue" placeholder="Link (example: http://google.ca">
       <div class="e-row">
-        <input type="checkbox" id="new-tab">
-        <label for="new-tab">Open in new Tab?</label>
+        <input type="checkbox" id="new-tab-<%= lang %>">
+        <label for="new-tab-<%= lang %>">Open in new Tab?</label>
       </div>
-      <button class="e-done">Done</button>
+      <button class="e-done e-done-<%= lang %>">Done</button>
     </div>
   </div>
 </div>
 
 <script>
   // define vars
-  const editor = document.getElementsByClassName('easy-comment-editor')[0];
-  const toolbar = editor.getElementsByClassName('e-toolbar')[0];
-  const buttons = toolbar.querySelectorAll('.editor-btn:not(.e-has-submenu)');
-  const contentArea = editor.getElementsByClassName('e-content-area')[0]; // wrapper for visual and html views
+  (function() {
+  const editor = document.getElementsByClassName('easy-comment-editor-<%= lang %>')[0];
+  const toolbar = editor.getElementsByClassName('e-toolbar-<%= lang %>')[0];
+  const buttons = toolbar.querySelectorAll('.editor-btn-<%= lang %>:not(.e-has-submenu)');
+  const contentArea = editor.getElementsByClassName('e-content-area-<%= lang %>')[0]; // wrapper for visual and html views
   const visuellView = contentArea.getElementsByClassName('e-visuell-view')[0]; // wysiwyg
-  const htmlView = contentArea.getElementsByClassName('e-html-view')[0]; // html
-  const modal = document.getElementsByClassName('e-modal')[0]; // link add modal
+  const htmlView = contentArea.getElementsByClassName('e-html-view-<%= lang %>')[0]; // html
+  const modal = document.getElementsByClassName('e-modal-<%= lang %>')[0]; // link add modal
 
   // add active tag event
   document.addEventListener('selectionchange', selectionChange);
@@ -144,7 +146,7 @@
 
       switch(action) {
         case 'toggle-view':
-          execCodeAction(this, editor);
+          execCodeAction(button, editor);
           break;
         case 'createLink':
           execLinkAction();
@@ -160,8 +162,8 @@
    * This function toggles between visual and html view
    */
   function execCodeAction(button, editor) {
-    const visuellView = contentArea.getElementsByClassName('e-visuell-view')[0];
-    const htmlView = contentArea.getElementsByClassName('e-html-view')[0];
+    const visuellView = contentArea.getElementsByClassName('e-visuell-view-<%= lang %>')[0];
+    const htmlView = contentArea.getElementsByClassName('e-html-view-<%= lang %>')[0];
     if (button.classList.contains('active')) { // show visuell view
       visuellView.innerHTML = htmlView.value;
       htmlView.style.display = 'none'
@@ -183,14 +185,14 @@
     modal.style.display = 'block';
     let selection = saveSelection();
 
-    let submit = modal.querySelectorAll('button.e-done')[0];
+    let submit = modal.querySelectorAll('button.e-done-<%= lang %>')[0];
     let close = modal.querySelectorAll('.e-close')[0];
 
     // done button active => add link
     submit.addEventListener('click', function(e) {
       e.preventDefault();
-      let newTabCheckbox = modal.querySelectorAll('#new-tab')[0];
-      let linkInput = modal.querySelectorAll('#linkValue')[0];
+      let newTabCheckbox = modal.querySelectorAll('#new-tab-<%= lang %>')[0];
+      let linkInput = modal.querySelectorAll('.linkValue')[0];
       let linkValue = linkInput.value;
       let newTab = newTabCheckbox.checked;
 
@@ -214,7 +216,7 @@
     // close modal on X click
     close.addEventListener('click', function(e) {
       e.preventDefault();
-      let linkInput = modal.querySelectorAll('#linkValue')[0];
+      let linkInput = modal.querySelectorAll('.linkValue')[0];
 
       modal.style.display = 'none';
       linkInput.value = '';
@@ -299,20 +301,20 @@
    * Sets the tag active that is responsible for the current element
    */
   function parentTagActive(elem) {
-    if(!elem ||!elem.classList || elem.classList.contains('visuell-view')) return false;
+    if(!elem || !elem.classList || elem.classList.contains('visuell-view')) return false;
 
     let toolbarButton;
 
     // active by tag names
     let tagName = elem.tagName.toLowerCase();
-    toolbarButton = document.querySelectorAll(`.e-toolbar .editor-btn[data-tag-name="${tagName}"]`)[0];
+    toolbarButton = editor.querySelectorAll(`.e-toolbar .editor-btn[data-tag-name="${tagName}"]`)[0];
     if(toolbarButton) {
       toolbarButton.classList.add('active');
     }
 
     // active by text-align
     let textAlign = elem.style.textAlign;
-    toolbarButton = document.querySelectorAll(`.e-toolbar .editor-btn[data-style="textAlign:${textAlign}"]`)[0];
+    toolbarButton = editor.querySelectorAll(`.e-toolbar .editor-btn[data-style="textAlign:${textAlign}"]`)[0];
     if(toolbarButton) {
       toolbarButton.classList.add('active');
     }
@@ -346,7 +348,7 @@
   $(function() {
     $("<%= form_selector %>").submit(function() {
       let value = '';
-      if ($('.e-visuell-view:visible').length > 0) {
+      if ($('.e-visuell-view-<%= lang %>:visible').length > 0) {
         value = visuellView.innerHTML;
       } else {
         value = htmlView.value
@@ -354,13 +356,13 @@
       $('input[name="<%= input_name %>"]:hidden')[0].value = value;
     })
   })
+  })()
 </script>
 
 <style>
-#editor-wrapper {
+.editor-wrapper {
   margin: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
   font-family: 'Helvetica Neue', 'Helvetica', arial, sans-serif;
 }
