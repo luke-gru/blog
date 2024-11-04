@@ -49,7 +49,7 @@ jobs:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
         # assets:precompile is needed due to bug in sassc mixed with tailwind-rails with controller tests
-        run: bin/rails tailwindcss:build && RAILS_ENV=development bin/rake assets:precompile && bin/rails test
+        run: bin/rails tailwindcss:build && RAILS_ENV=development ADMIN_BASIC_NAME=1 ADMIN_BASIC_PASS=1 bin/rake assets:precompile && bin/rails test
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
