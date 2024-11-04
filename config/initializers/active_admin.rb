@@ -349,9 +349,11 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   # config.use_webpacker = true
-  if ENV["ADMIN_BASIC_NAME"].blank? || ENV["ADMIN_BASIC_PASS"].blank?
-    $stderr.puts "ADMIN_BASIC_NAME and ADMIN_BASIC_PASS must bet set!"
-    exit 1
+  unless Rails.env.test?
+    if ENV["ADMIN_BASIC_NAME"].blank? || ENV["ADMIN_BASIC_PASS"].blank?
+      $stderr.puts "ADMIN_BASIC_NAME and ADMIN_BASIC_PASS must bet set!"
+      exit 1
+    end
   end
 
   config.before_action do
