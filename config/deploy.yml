@@ -26,7 +26,7 @@ proxy:
   # kamal-proxy connects to your container over port 80, use `app_port` to specify a different port.
   app_port: 3000
 
-# Credentials for your image host.
+# Credentials for your image host (docker hub).
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
@@ -38,8 +38,12 @@ registry:
 
 # Inject ENV variables into containers (secrets come from .env).
 env:
-  REDIS_HOST: "my-blog-redis"
-  REDIS_PORT: "6379"
+  clear:
+    REDIS_HOST: "my-blog-redis"
+    REDIS_PORT: "6379"
+  secret:
+    - ADMIN_BASIC_NAME
+    - ADMIN_BASIC_PASS
 
 # Configure builder setup.
 builder:
@@ -62,19 +66,20 @@ builder:
 aliases:
   shell: app exec --interactive --reuse "bash"
   console: app exec --interactive ./bin/rails console
+  # logs live in /var/lib/docker/containers*/*-json.log (using the JSON driver)
   logs: app logs -f
 
 # Use a different ssh user than root
 #
 ssh:
-  #user: my-blog
+  user: root
   port: "2221"
   keys_only: true
   keys: [ "~/.ssh/linode_key" ]
-  config: false
+  config: true
 
 # Use a persistent storage volume.
-#
+# Located on the server in /var/lib/docker/volumes
 volumes:
   - "app_storage:/rails/storage"
   - "logs:/rails/log"
@@ -97,7 +102,6 @@ asset_path: /rails/public/assets
 accessories:
   redis:
     image: redis:7.4.1
-    port: 6379
     directories:
       - data:/data
     roles:
