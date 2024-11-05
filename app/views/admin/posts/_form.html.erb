@@ -27,10 +27,10 @@
     %>
 
     <% if @post.content_fr.blank? %>
-      <div class="content-duplicate-fr">
+      <li class="input">
         <%= f.label :content_fr_duplicate, "Duplicate content to French?" %>
         <%= f.check_box :content_fr_duplicate %>
-      </div>
+      </li>
     <% else %>
       <li class="string input">
         <%= f.label "content_fr", "Content (FR)", class: "label" %>

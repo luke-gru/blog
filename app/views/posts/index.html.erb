@@ -1,7 +1,6 @@
 <section id="posts-search-menu" class="flex" style="justify-content: center;">
   <form action="<%= posts_page_path %>" method="get">
     <input type="text" name="search" placeholder="Search" value="<%= params[:search] %>" />
-    <%# TODO: csrf token %>
     <input type="submit" class="btn-primary" />
     <% if @tags %>
       <%# NOTE: right now, only 1 tag can be shown here %>
