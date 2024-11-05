@@ -43,7 +43,10 @@ class Post < ApplicationRecord
   def self.recently_published(search: nil, tag: nil, most_recent: 3)
     scope = Post.published.includes(:user, :tags)
     if search.present?
-      scope.where!("#{table_name}.title LIKE ? OR #{table_name}.content LIKE ?", "%#{search}%", "%#{search}%")
+      locale = I18n.locale
+      title_field = locale == :en ? "title" : "title_fr"
+      content_field = locale == :en ? "content" : "content_fr"
+      scope.where!("#{table_name}.#{title_field} LIKE ? OR #{table_name}.#{content_field} LIKE ?", "%#{search}%", "%#{search}%")
     end
     if tag.present?
       scope.where!(tags: { tag: tag })
