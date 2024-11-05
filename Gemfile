@@ -57,6 +57,7 @@ gem "ostruct" # use the gem in order to silence warnings
 gem "devise", "~> 4.9"
 gem "activeadmin"
 gem "sidekiq"
+gem "friendly_id"
 
 gem "sassc-rails"
 gem "tailwindcss-rails", "~> 2.7"

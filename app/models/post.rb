@@ -2,15 +2,20 @@
 class Post < ApplicationRecord
   belongs_to :user
   has_many_attached :images # activestorage
-  validates :user, presence: true
-  validates :title, presence: true, uniqueness: true
-  validates :content, presence: true
   has_many :post_tags, dependent: :destroy
   has_many :tags, through: :post_tags
 
-  accepts_nested_attributes_for :post_tags # Allow Post#tag_ids = [1,3]
+  validates :user, presence: true
+  validates :title, presence: true, uniqueness: true
+  validates :content, presence: true
 
   enum :status, [:draft, :published, :unpublished]
+
+  # url slugs
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :history]
+
+  accepts_nested_attributes_for :post_tags # Allow Post#tag_ids = [1,3]
 
   attr_accessor :first_published_now
   attr_accessor :content_fr_duplicate # for active admin form
@@ -79,6 +84,11 @@ class Post < ApplicationRecord
     template = Erubis::Eruby.new(content, pattern: "{% %}")
     context = MyErbContext.new(post: self)
     template.evaluate(context)
+  end
+
+  # friendly_id hook
+  def should_generate_new_friendly_id?
+    slug.blank? || title_changed?
   end
 
   private

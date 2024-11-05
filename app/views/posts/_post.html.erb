@@ -2,7 +2,7 @@
 <div class="post my-8">
   <div class="post-title text-4xl font-semibold">
     <% if controller.action_name == "index"  %>
-      <%= link_to post_title(post), class: "hover-link" %>
+      <%= link_to post_title(post), post_page_path(post), class: "hover-link" %>
     <% else %>
       <%= post_title(post) %>
     <% end %>

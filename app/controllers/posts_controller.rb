@@ -14,9 +14,9 @@ class PostsController < ApplicationController
     end
   end
 
-  # @params :id
+  # @params :id (slug)
   def show
-    @post = Post.find_by_id(params[:id])
+    @post = Post.friendly.find(params[:id], allow_nil: true)
     unless @post
       Rails.logger.info "No post with this id"
       redirect_to(posts_page_path) and return
