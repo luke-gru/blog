@@ -44,6 +44,7 @@ env:
   secret:
     - ADMIN_BASIC_NAME
     - ADMIN_BASIC_PASS
+    - BLOG_REDIS_PASS
 
 # Configure builder setup.
 builder:
@@ -107,6 +108,7 @@ accessories:
     roles:
       - web
       - job
+    cmd: "redis-server --requirepass <%= ENV['BLOG_REDIS_PASS'] %>"
 #   db:
 #     image: mysql:8.0
 #     host: 192.168.0.2
