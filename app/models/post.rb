@@ -13,6 +13,8 @@ class Post < ApplicationRecord
 
   # url slugs
   extend FriendlyId
+  # This is created by friendly_id history module:
+  # has_many :slugs, class_name: "FriendlyId::Slug", inverse_of: :sluggable
   friendly_id :title, use: [:slugged, :history]
 
   accepts_nested_attributes_for :post_tags # Allow Post#tag_ids = [1,3]

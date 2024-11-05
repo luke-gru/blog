@@ -28,6 +28,16 @@ ActiveAdmin.register Post do
       row "Title (FR)" do |p|
         p.title_fr
       end
+      row "Slug" do |p|
+        div { "Current:<br>&nbsp#{p.slug}".html_safe }
+        if p.slug.present? && (slugs = p.slugs).size > 1
+          div { "Others:" }
+          slugs.each do |slug|
+            div { "&nbsp".html_safe + slug.slug } unless slug.slug == p.slug
+          end
+          nil
+        end
+      end
       row :status
       row :first_published_at
       row "Content (EN)" do |p|
