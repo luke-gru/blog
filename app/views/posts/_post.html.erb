@@ -25,9 +25,9 @@
     <div class="post-tags">
       <% tags.each do |tag| %>
         <% if params[:tag].present? %>
-          <a class="post-tag btn-primary" href="<%= posts_page_path %>"><%= tag.tag %></a>
+          <a class="post-tag btn-primary" href="<%= posts_page_path %>"><%= tag_name(tag) %></a>
         <% else %>
-          <a class="post-tag btn-primary" href="<%= posts_page_path(:tag =>  tag.tag) %>"><%= tag.tag %></a>
+          <a class="post-tag btn-primary" href="<%= posts_page_path(:tag =>  tag.tag) %>"><%= tag_name(tag) %></a>
         <% end %>
       <% end %>
     </div>

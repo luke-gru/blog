@@ -6,7 +6,7 @@
       <%# NOTE: right now, only 1 tag can be shown here %>
       <% @tags.each do |tag| %>
         <%# click to disable search on tag %>
-        <a href="<%= posts_page_path %>" class="menu-tag btn-primary"><%= tag.tag %></a>
+        <a href="<%= posts_page_path %>" class="menu-tag btn-primary"><%= tag_name(tag) %></a>
       <% end %>
     <% end %>
   </form>

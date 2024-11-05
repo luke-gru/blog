@@ -5,7 +5,7 @@ class Tag < ApplicationRecord
   has_many :posts, through: :post_tags
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "id", "id_value", "tag", "updated_at"]
+    ["created_at", "id", "id_value", "tag", "tag_fr", "updated_at"]
   end
 
   def self.ransackable_associations(auth_object = nil)
