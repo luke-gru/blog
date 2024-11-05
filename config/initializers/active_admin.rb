@@ -362,3 +362,21 @@ ActiveAdmin.setup do |config|
     end
   end
 end
+
+# monkey-patches
+ActiveSupport.on_load(:action_controller_base) do
+  ActiveSupport.on_load(:application_controller) do
+    ActiveAdmin::ResourceController.class_eval do
+      def find_resource
+        finder = resource_class.is_a?(FriendlyId) ? :slug : :id
+        found = scoped_collection.find_by(finder => params[:id])
+        return found if found
+        if finder == :slug
+          found = scoped_collection.find_by(id: params[:id])
+          return found if found
+        end
+        raise ActiveRecord::RecordNotFound, "Couldn't find #{resource_class.name} with id: #{params[:id]}"
+      end
+    end
+  end
+end

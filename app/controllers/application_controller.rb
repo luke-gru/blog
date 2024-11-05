@@ -24,3 +24,5 @@ class ApplicationController < ActionController::Base
   end
 
 end
+
+ActiveSupport.run_load_hooks(:application_controller, ApplicationController)
