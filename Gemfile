@@ -15,7 +15,7 @@ gem "turbo-rails" # TODO: remove or use
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails" # TODO: remove or use
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -24,8 +24,6 @@ gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -54,14 +52,14 @@ group :deployment do
 end
 gem "ostruct" # use the gem in order to silence warnings
 
-gem "devise", "~> 4.9"
-gem "activeadmin"
-gem "sidekiq"
-gem "friendly_id"
+gem "devise", "~> 4.9" # admin user authentication
+gem "activeadmin" # admin console
+gem "sidekiq" # background jobs
+gem "friendly_id" # url slugs
 
 gem "sassc-rails"
 gem "tailwindcss-rails", "~> 2.7"
 #gem "cssbundling-rails"
 
 gem "rouge" # syntax highlighting code for blog posts
-gem "erubis"
+gem "erubis" # using erb templates from database
