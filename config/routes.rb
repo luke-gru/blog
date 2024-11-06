@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   # user login routes and other devise routes namespaced under /admin/
   devise_for :users, ActiveAdmin::Devise.config
@@ -20,6 +21,10 @@ Rails.application.routes.draw do
     post "posts/unsubscribe/:token", to: "posts#unsubscribe", as: :posts_unsubscribe
     get  "posts/subscribe-confirm/:token", to: "posts#subscribe_confirm", as: :posts_subscribe_confirm
     get  "posts/:id", to: "posts#show", as: :post_page
+
+    post   "post-comments/create", to: "post_comments#create", as: :post_comments_create
+    patch  "post-comments/update", to: "post_comments#update", as: :post_comments_update
+    delete "post-comments/delete", to: "post_comments#destroy", as: :post_comments_delete
   end
 
   # redirect to /en/some-url if url doesn't start with /en or /fr

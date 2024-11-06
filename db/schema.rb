@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_05_202837) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_06_194503) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -90,6 +90,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_05_202837) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "post_comments", force: :cascade do |t|
+    t.integer "post_id"
+    t.text "comment", null: false
+    t.string "username", null: false
+    t.string "ip_address", null: false
+    t.integer "status", default: 0, null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ip_address"], name: "index_post_comments_on_ip_address"
+    t.index ["post_id"], name: "index_post_comments_on_post_id"
+    t.index ["status"], name: "index_post_comments_on_status"
   end
 
   create_table "post_tags", force: :cascade do |t|
