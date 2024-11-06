@@ -22,9 +22,11 @@ Rails.application.routes.draw do
     get  "posts/subscribe-confirm/:token", to: "posts#subscribe_confirm", as: :posts_subscribe_confirm
     get  "posts/:id", to: "posts#show", as: :post_page
 
-    post   "post-comments/create", to: "post_comments#create", as: :post_comments_create
-    patch  "post-comments/update", to: "post_comments#update", as: :post_comments_update
-    delete "post-comments/delete", to: "post_comments#destroy", as: :post_comments_delete
+    defaults format: :json do
+      post   "post-comments/create", to: "post_comments#create", as: :post_comments_create
+      patch  "post-comments/update", to: "post_comments#update", as: :post_comments_update
+      delete "post-comments/delete", to: "post_comments#destroy", as: :post_comments_delete
+    end
   end
 
   # redirect to /en/some-url if url doesn't start with /en or /fr
