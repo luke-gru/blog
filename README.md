@@ -7,6 +7,8 @@
 * redis-server >= 6.2.0 (for background jobs)
 * sqlite3
 * Nodejs + npm
+* docker, curl and git
+* sshd
 
 ## Development dependencies:
 
@@ -67,4 +69,8 @@ To detach: <CTRL-p> <CTRL-q>
 
 Use bin/run to run commands in the docker webapp container, ex: `./bin/run console`
 If you get permissions errors, make sure a docker group has been created and setup.
+
+## Deployment
+
+Deployment uses kamal
 
