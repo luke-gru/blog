@@ -23,9 +23,10 @@ Rails.application.routes.draw do
     get  "posts/:id", to: "posts#show", as: :post_page
 
     defaults format: :json do
-      post   "post-comments/create", to: "post_comments#create", as: :post_comments_create
-      patch  "post-comments/update", to: "post_comments#update", as: :post_comments_update
-      delete "post-comments/delete", to: "post_comments#destroy", as: :post_comments_delete
+      get    "post-comments/:post_id", to: "post_comments#index", as: :post_comments
+      post   "post-comments/:post_id/create", to: "post_comments#create", as: :post_comments_create
+      patch  "post-comments/:comment_id/update", to: "post_comments#update", as: :post_comments_update
+      delete "post-comments/:comment_id/delete", to: "post_comments#destroy", as: :post_comments_delete
     end
   end
 

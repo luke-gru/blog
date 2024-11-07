@@ -1,0 +1,15 @@
+vim_is_better_i_agree:
+  post: first_with_comments
+  comment: "I agree"
+  username: "John"
+  ip_address: "10.10.10.10"
+  status: "status_whitelisted"
+  locale: "en"
+
+vim_is_better_i_disagree:
+  post: first_with_comments
+  comment: "I disagree, you're a terrible person"
+  username: "Nick"
+  ip_address: "10.10.10.9"
+  status: "status_new"
+  locale: "en"

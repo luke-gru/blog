@@ -29,9 +29,14 @@ class PostComment < ApplicationRecord
     order("#{table_name}.id DESC")
   end
 
-  # @param String string_id
+  def self.whitelisted
+    status_whitelisted
+  end
+
+  # @param String|Integer string_id
   # @return String
   def self.encode_id(string_id)
+    string_id = string_id.to_s
     raise "Invalid string_id" if string_id.blank?
     chars = string_id.chars
     chars_sz = chars.size

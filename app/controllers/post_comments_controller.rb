@@ -25,16 +25,16 @@ class PostCommentsController < ApplicationController
     comment.ip_address = request.remote_ip
     if comment.save
       logger.info "Successfully created comment"
-      render json: { success: true }
       # TODO: check if this works
       cookies.signed[:comments_created] ||= []
       cookies.signed[:comments_created] << encode_id(comment.id.to_s)
+      render json: { success: true }
     else
       logger.info "Error creating post comment: #{comment.errors.full_messages.join(', ')}"
       render json: {
         success: false,
         errors: comment.errors.messages.slice(:comment, :username)
-      }
+      }, status: :unprocessable_entity
     end
   end
 
@@ -57,7 +57,7 @@ class PostCommentsController < ApplicationController
       render json: {
         success: false,
         errors: @comment.errors.messages
-      }
+      }, status: :unprocessable_entity
     end
   end
 
@@ -100,7 +100,7 @@ class PostCommentsController < ApplicationController
 
   def get_post
     @post = Post.friendly.find(params[:post_id], allow_nil: true)
-    unless post
+    unless @post
       logger.info "No post with this id"
       render json: {
         success: false,

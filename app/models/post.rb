@@ -94,6 +94,10 @@ class Post < ApplicationRecord
     slug.blank? || title_changed?
   end
 
+  def create_or_update_slug!
+    save! if should_generate_new_friendly_id?
+  end
+
   private
 
   # callback

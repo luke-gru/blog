@@ -9,3 +9,9 @@ first_published:
   title: "My First Post"
   content: "content"
   status: "published"
+
+first_with_comments:
+  user: luke_admin
+  title: "My Controversial post"
+  content: "vim is better than emacs!"
+  status: "published"
