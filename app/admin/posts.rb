@@ -96,7 +96,7 @@ ActiveAdmin.register Post do
 
     def set_content
       raw_content = params[:post][:content] || ''
-      highlight = CodeHighlighting.new(raw_content)
+      highlight = CodeHighlighting.new(raw_content, input_is_html_safe: true)
       if (new_content = highlight.substitute_code_templates)
         params[:post][:content] = new_content
       elsif highlight.error

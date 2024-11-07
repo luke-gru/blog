@@ -89,13 +89,13 @@ class Post < ApplicationRecord
     template.evaluate(context)
   end
 
+  def create_or_update_slug!
+    save! if should_generate_new_friendly_id?
+  end
+
   # friendly_id hook
   def should_generate_new_friendly_id?
     slug.blank? || title_changed?
-  end
-
-  def create_or_update_slug!
-    save! if should_generate_new_friendly_id?
   end
 
   private
