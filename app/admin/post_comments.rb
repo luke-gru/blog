@@ -27,6 +27,25 @@ ActiveAdmin.register PostComment do
     actions
   end
 
+  show do
+    attributes_table_for(resource) do
+      row :post
+      row :comment
+      row :username do |c|
+        link_to c.username, admin_post_comments_path(q: { username_eq: c.username })
+      end
+      row :ip_address do |c|
+        link_to c.ip_address, admin_post_comments_path(q: { ip_address_eq: c.ip_address })
+      end
+      row :status do |c|
+        c.pretty_status
+      end
+      row :locale
+      row :created_at
+      row :updated_at
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :post, include_blank: false, input_html: { disabled: true }
