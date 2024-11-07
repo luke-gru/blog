@@ -12,7 +12,7 @@ class Post < ApplicationRecord
 
   enum :status, [:draft, :published, :unpublished]
 
-  # url slugs
+  # Url slugs. They come from the title of the post.
   extend FriendlyId
   # This is created by friendly_id history module:
   # has_many :slugs, class_name: "FriendlyId::Slug", inverse_of: :sluggable
@@ -23,16 +23,16 @@ class Post < ApplicationRecord
   attr_accessor :first_published_now
   attr_accessor :content_fr_duplicate # for active admin form
 
-  before_save :set_first_published_at, if: (lambda do
+  before_save(:set_first_published_at, if: lambda do
     before_published_at = changes["first_published_at"]
     self.first_published_at.blank? && before_published_at.blank? && self.status.to_s == "published"
   end)
 
-  before_save :set_content_fr_defaults, if: (lambda do
+  before_save(:set_content_fr_defaults, if: lambda do
     self.content_fr_duplicate && self.content_fr.blank?
   end)
 
-  after_save_commit :send_emails_to_subscribers, :if => (lambda do
+  after_save_commit(:send_emails_to_subscribers, if: lambda do
     self.first_published_now
   end)
 
@@ -102,6 +102,7 @@ class Post < ApplicationRecord
     self.first_published_now = true
   end
 
+  # callback
   def set_content_fr_defaults
     self.content_fr = self.content
   end

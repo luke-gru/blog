@@ -2,12 +2,14 @@
 class PostCommentsController < ApplicationController
   before_action :get_post, only: [:index, :create]
   before_action :get_my_comment, only: [:update, :destroy]
+  before_action :rate_limit_by_ip, only: [:create, :update]
 
   # @params :post_id (slug)
   def index
     comments = @post.comments.recent_first.to_a
     my_comments = cookies.signed[:comments_created] || []
     my_comments = my_comments.map { |cid| decode_id(cid).to_i }
+    # user can view their own comments and whitelisted comments from others
     comments = comments.select do |comment|
       comment.whitelisted? || my_comments.include?(comment.id)
     end
@@ -18,7 +20,6 @@ class PostCommentsController < ApplicationController
 
   # @params :comment, :username, :post_id (slug)
   def create
-    # TODO: rate-limit comments by ip address
     comment = PostComment.new(params.permit(:comment, :username))
     comment.post = @post
     comment.ip_address = request.remote_ip
@@ -29,7 +30,7 @@ class PostCommentsController < ApplicationController
       cookies.signed[:comments_created] ||= []
       cookies.signed[:comments_created] << encode_id(comment.id.to_s)
     else
-      logger.info "Error creating post comment"
+      logger.info "Error creating post comment: #{comment.errors.full_messages.join(', ')}"
       render json: {
         success: false,
         errors: comment.errors.messages.slice(:comment, :username)
@@ -48,12 +49,11 @@ class PostCommentsController < ApplicationController
       }
       return
     end
-    # TODO: rate-limit comment updates by ip address
     @comment.comment = new_comment
     if @comment.save
       render json: { success: true }
     else
-      logger.info "Unable to save comment"
+      logger.info "Unable to save comment: #{@comment.errors.full_messages.join(', ')}"
       render json: {
         success: false,
         errors: @comment.errors.messages
@@ -107,6 +107,17 @@ class PostCommentsController < ApplicationController
         post_not_found: true,
       }, status: :unprocessable_entity
       return
+    end
+  end
+
+  def rate_limit_by_ip
+    ip = request.remote_ip
+    if PostComment.recent_by_ip(ip: ip, time_cutoff: 10.minutes.ago).count >= 2
+      logger.info "This user already created 2 comments within the last 10 minutes. Rate limited."
+      render json: {
+        success: false,
+        rate_limited: true,
+      }, status: :unprocessable_entity
     end
   end
 

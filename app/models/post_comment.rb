@@ -55,6 +55,17 @@ class PostComment < ApplicationRecord
     decoded[3, sz.to_i]
   end
 
+  # @param ip: String
+  # @param time_cutoff: ActiveSupport::TimeWithZone
+  def self.recent_by_ip(ip:, time_cutoff:)
+    raise ArgumentError unless time_cutoff.is_a?(ActiveSupport::TimeWithZone)
+    where(
+      "#{table_name}.ip_address = :ip AND #{table_name}.created_at >= :time",
+      ip: ip,
+      time: time_cutoff.utc
+    )
+  end
+
   def whitelisted?
     self.status == "status_whitelisted"
   end
