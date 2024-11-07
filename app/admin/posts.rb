@@ -2,6 +2,10 @@
 ActiveAdmin.register Post do
   menu priority: 10
 
+  filter :user
+  filter :title
+  filter :created_at
+
   index do
     selectable_column
     id_column
@@ -12,10 +16,6 @@ ActiveAdmin.register Post do
     column :updated_at
     actions
   end
-
-  filter :user
-  filter :title
-  filter :created_at
 
   show do
     attributes_table_for(resource) do
@@ -69,9 +69,13 @@ ActiveAdmin.register Post do
         else
           content << "None"
         end
+        content
       end
-      content
+      row "Comments (#{resource.comments.count})" do |p|
+        link_to "Show all", admin_post_comments_path(commit: "Filter", q: { post_id_eq: p.id }, order: "id_desc")
+      end
     end
+
   end
 
   form partial: 'form'

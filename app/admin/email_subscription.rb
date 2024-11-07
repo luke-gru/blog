@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 ActiveAdmin.register EmailSubscription do
   menu priority: 20, label: "Subscriptions"
+
   index do
     selectable_column
     id_column
@@ -13,9 +14,7 @@ ActiveAdmin.register EmailSubscription do
     actions
   end
 
-
   form do |f|
-
     # errors for non-shown form values
     if flash[:error].blank?
       only_allow_update_fields = [:email, :locale]

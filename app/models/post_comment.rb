@@ -13,6 +13,18 @@ class PostComment < ApplicationRecord
 
   enum :status, [:status_new, :status_whitelisted, :status_unpublished]
 
+  def self.ransackable_associations(auth_object = nil)
+    ["post"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["comment", "created_at", "id", "ip_address", "locale", "post_id", "status", "updated_at", "username"]
+  end
+
+  def self.pretty_statuses
+    self.statuses.transform_keys { |k| k.sub("status_", "") }
+  end
+
   def self.recent_first
     order("#{table_name}.id DESC")
   end
@@ -52,10 +64,14 @@ class PostComment < ApplicationRecord
     self.class.encode_id(self.id.to_s)
   end
 
+  def pretty_status
+    self.status.to_s.sub("status_", "")
+  end
+
   protected
 
   def set_defaults
     self.locale ||= I18n.locale
-    self.status = :status_new
+    self.status ||= "status_new"
   end
 end
