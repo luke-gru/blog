@@ -62,13 +62,29 @@ class PostComment < ApplicationRecord
 
   # @param ip: String
   # @param time_cutoff: ActiveSupport::TimeWithZone
-  def self.recent_by_ip(ip:, time_cutoff:)
+  def self.recently_created_by_ip(ip:, time_cutoff:)
     raise ArgumentError unless time_cutoff.is_a?(ActiveSupport::TimeWithZone)
     where(
       "#{table_name}.ip_address = :ip AND #{table_name}.created_at >= :time",
       ip: ip,
       time: time_cutoff.utc
     )
+  end
+
+  # @param ip: String
+  # @param time_cutoff: ActiveSupport::TimeWithZone
+  def self.recently_updated_by_ip(ip:, time_cutoff:)
+    raise ArgumentError unless time_cutoff.is_a?(ActiveSupport::TimeWithZone)
+    where(
+      "#{table_name}.ip_address = :ip AND #{table_name}.created_at != " \
+      "#{table_name}.updated_at AND #{table_name}.updated_at >= :time",
+      ip: ip,
+      time: time_cutoff.utc
+    )
+  end
+
+  def unpublish!
+    update_attribute(:status, "status_unpublished")
   end
 
   def whitelisted?

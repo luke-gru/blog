@@ -76,6 +76,7 @@ class PostCommentsController < ApplicationController
       logger.info "Invalid comment id (blank)"
       render json: {
         success: false,
+        invalid_comment_id: true,
       }, status: :unprocessable_entity
       return
     end
@@ -83,16 +84,17 @@ class PostCommentsController < ApplicationController
       logger.info "Can't update comment id that's not in cookie"
       render json: {
         success: false,
+        invalid_cookie: true,
       }, status: :unprocessable_entity
       return
     end
     comment_id = decode_id(comment_id).to_i
-    # TODO: rate-limit comment updates by ip address
     @comment = PostComment.find_by_id(comment_id)
     unless @comment
       logger.info "Comment not found after decoding id (#{comment_id})"
       render json: {
         success: false,
+        comment_not_found: true,
       }, status: :unprocessable_entity
       return
     end
@@ -112,12 +114,25 @@ class PostCommentsController < ApplicationController
 
   def rate_limit_by_ip
     ip = request.remote_ip
-    if PostComment.recent_by_ip(ip: ip, time_cutoff: 10.minutes.ago).count >= 2
-      logger.info "This user already created 2 comments within the last 10 minutes. Rate limited."
-      render json: {
-        success: false,
-        rate_limited: true,
-      }, status: :unprocessable_entity
+    if action_name == "create"
+      if PostComment.recently_created_by_ip(ip: ip, time_cutoff: 10.minutes.ago).count >= 2
+        logger.info "This user already created 2 comments within the last 10 minutes. Rate limited."
+        render json: {
+          success: false,
+          rate_limited: true,
+          rate_limited_create: true,
+        }, status: :unprocessable_entity
+        return
+      end
+    elsif action_name == "update"
+      if PostComment.recently_updated_by_ip(ip: ip, time_cutoff: 2.minutes.ago).count > 0
+        logger.info "This user already updated a comment within the last 2 minutes. Rate limited."
+        render json: {
+          success: false,
+          rate_limited: true,
+          rate_limit_update: true,
+        }, status: :unprocessable_entity
+      end
     end
   end
 

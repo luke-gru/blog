@@ -35,6 +35,7 @@ class PostCommentsControllerTest < ActionDispatch::IntegrationTest
       as: :json
     )
     assert_response :success
+    assert cookies[:comments_created].present?
   end
 
   test "should not create comment (error)" do
@@ -46,6 +47,23 @@ class PostCommentsControllerTest < ActionDispatch::IntegrationTest
       as: :json
     )
     assert_response :unprocessable_entity
+  end
+
+  test "should not create comment (rate limited)" do
+    post = posts(:first_published)
+    post.create_or_update_slug!
+    2.times do
+      PostComment.create!(comment: "hi", username: "hi", ip_address: "127.0.0.1", post: post)
+    end
+    post post_comments_create_path(post,
+      locale: I18n.locale,
+      params: { comment: "Hello!", username: "user" },
+      as: :json
+    )
+    assert_response :unprocessable_entity
+    res = json_response
+    assert res["rate_limited"]
+    refute cookies[:comments_created].present?
   end
 
   test "can update one's own comment" do
@@ -107,6 +125,24 @@ class PostCommentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "can not update one's own comment (rate limited)" do
+    post = posts(:first_with_comments)
+    comment = post.comments.whitelisted.last
+    assert comment.present?
+    comment_id = PostComment.encode_id(comment.id)
+    set_signed_cookie(:comments_created, [comment_id])
+    comment.update!(comment: "cool post!", ip_address: "127.0.0.1")
+    patch post_comments_update_path(
+      locale: I18n.locale,
+      comment_id: comment_id,
+      params: { comment: "updated comment" },
+      as: :json
+    )
+    assert_response :unprocessable_entity
+    res = json_response
+    assert res["rate_limited"]
+  end
+
   test "can delete one's own comment" do
     post = posts(:first_with_comments)
     comment = post.comments.whitelisted.last
@@ -120,6 +156,19 @@ class PostCommentsControllerTest < ActionDispatch::IntegrationTest
     )
     assert_response :success
     assert_nil PostComment.find_by_id(comment.id)
+  end
+
+  test "can not delete another's comment" do
+    post = posts(:first_with_comments)
+    comment = post.comments.whitelisted.last
+    assert comment.present?
+    comment_id = PostComment.encode_id(comment.id)
+    delete post_comments_delete_path(
+      locale: I18n.locale,
+      comment_id: comment_id,
+      as: :json
+    )
+    assert_response :unprocessable_entity
   end
 
   private
