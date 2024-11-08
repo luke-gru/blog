@@ -2,6 +2,8 @@
 class CodeHighlighting
   attr_reader :error
 
+  # The initial list of supported languages and how I want to name them.
+  # This list can grow at runtime.
   SUPPORTED_LANGS = {
     "ruby" => :Ruby,
     "rb"   => :Ruby,
@@ -30,10 +32,10 @@ class CodeHighlighting
 
   # substitutes:
   # ```lang
-  # code here
+  #   code here
   # ```
   # with HTML that has specific highlighting classes
-  # @return String, that is html safe (can call raw() on it)
+  # @return String that is html safe (can call raw() on it)
   def substitute_code_templates
     cursor = @content
     content_buf = []
@@ -46,13 +48,21 @@ class CodeHighlighting
           code_content.gsub! /<br>/, ''
         end
         code_content = sanitize_code(code_content).html_safe
+        orig_lang = lang
         lang = lang.downcase
         lexer = if lang.in?(SUPPORTED_LANG_NAMES)
           Rouge::Lexers.const_get(SUPPORTED_LANGS[lang]).new
+        # ex: ```Kotlin or ```kotlin
         elsif (found = (Rouge::Lexers.const_get(lang.capitalize) rescue nil)) &&
                found < Rouge::Lexer
           SUPPORTED_LANGS[lang] = lang.capitalize.intern
           SUPPORTED_LANG_NAMES << lang
+          found.new
+        # ex: ```LLVM
+        elsif (found = (Rouge::Lexers.const_get(orig_lang) rescue nil)) &&
+               found < Rouge::Lexer
+          SUPPORTED_LANGS[orig_lang] = orig_lang.intern
+          SUPPORTED_LANG_NAMES << orig_lang
           found.new
         else
           @error = "Unable to parse language '#{lang}'"
@@ -83,14 +93,18 @@ class CodeHighlighting
   end
 
   private
-  include ActionView::Helpers::TagHelper # for escape_once, sanitize
-  include ActionView::Helpers::SanitizeHelper # for sanitize
+
+  # don't pollute this namespace with all these methods, so use another
+  HTML_HELPER = (Class.new do
+    include ActionView::Helpers::TagHelper # for escape_once
+    include ActionView::Helpers::SanitizeHelper # for sanitize
+  end).new
 
   def html_escape(string)
     if @input_is_html_safe
       string
     else
-      escape_once(string)
+      HTML_HELPER.escape_once(string)
     end
   end
 
@@ -107,7 +121,7 @@ class CodeHighlighting
     if @input_is_html_safe
       code_content
     else
-      sanitize code_content, scrubber: CODE_SCRUBBER
+      HTML_HELPER.sanitize code_content, scrubber: CODE_SCRUBBER
     end
   end
 end

@@ -136,6 +136,27 @@ SRC
     assert_replacements result, 1
   end
 
+  def test_parser_lang_multiple_capitals_not_hardcoded_but_found
+    src = <<SRC
+```LLVM
+define double @foo(double %a, double %b) {
+entry:
+  %multmp = fmul double %a, %a
+  %multmp1 = fmul double 2.000000e+00, %a
+  %multmp2 = fmul double %multmp1, %b
+  %addtmp = fadd double %multmp, %multmp2
+  %multmp3 = fmul double %b, %b
+  %addtmp4 = fadd double %addtmp, %multmp3
+  ret double %addtmp4
+}
+```
+SRC
+    hl = CodeHighlighting.new(src, input_is_html_safe: true)
+    result = hl.substitute_code_templates
+    assert_nil hl.error
+    assert_replacements result, 1
+  end
+
   private
 
   def assert_replacements(result, num)
