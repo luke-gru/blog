@@ -2,6 +2,26 @@
 class CodeHighlighting
   attr_reader :error
 
+  SUPPORTED_LANGS = {
+    "ruby" => :Ruby,
+    "rb"   => :Ruby,
+    "c"    => :C,
+    "javascript" => :Javascript, 
+    "js" => :Javascript, 
+    "html" => :HTML,
+    "css" => :CSS,
+    "yaml" => :YAML,
+    "yml" =>  :YAML,
+    "json" => :JSON,
+    "erb" => :ERB,
+    "make" => :Make,
+    "shell" => :Shell,
+    "bash" => :Shell,
+    "sh" => :Shell,
+    "docker" => :Docker,
+  }
+  SUPPORTED_LANG_NAMES = SUPPORTED_LANGS.keys
+  
   def initialize(content, input_is_html_safe: false)
     @content = content
     @input_is_html_safe = input_is_html_safe
@@ -27,29 +47,13 @@ class CodeHighlighting
         end
         code_content = sanitize_code(code_content).html_safe
         lang = lang.downcase
-        lexer = case lang
-        when "ruby"
-          Rouge::Lexers::Ruby.new
-        when "c"
-          Rouge::Lexers::C.new
-        when "js", "javascript"
-          Rouge::Lexers::Javascript.new
-        when "html"
-          Rouge::Lexers::HTML.new
-        when "css"
-          Rouge::Lexers::CSS.new
-        when "yaml", "yml"
-          Rouge::Lexers::YAML.new
-        when "json"
-          Rouge::Lexers::JSON.new
-        when "erb"
-          Rouge::Lexers::ERB.new
-        when "make"
-          Rouge::Lexers::Make.new
-        when "shell", "bash", "sh"
-          Rouge::Lexers::Shell.new
-        when "docker"
-          Rouge::Lexers::Docker.new
+        lexer = if lang.in?(SUPPORTED_LANG_NAMES)
+          Rouge::Lexers.const_get(SUPPORTED_LANGS[lang]).new
+        elsif (found = (Rouge::Lexers.const_get(lang.capitalize) rescue nil)) &&
+               found < Rouge::Lexer
+          SUPPORTED_LANGS[lang] = lang.capitalize.intern
+          SUPPORTED_LANG_NAMES << lang
+          found.new
         else
           @error = "Unable to parse language '#{lang}'"
           return
