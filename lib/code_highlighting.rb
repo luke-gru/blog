@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class CodeHighlighting
-  attr_reader :error
 
   # The initial list of supported languages and how I want to name them.
   # This list can grow at runtime.
@@ -23,11 +22,14 @@ class CodeHighlighting
     "docker" => :Docker,
   }
   SUPPORTED_LANG_NAMES = SUPPORTED_LANGS.keys
+
+  attr_reader :error, :num_substitutions
   
   def initialize(content, input_is_html_safe: false)
     @content = content
     @input_is_html_safe = input_is_html_safe
     @error = nil
+    @num_substitutions = 0
   end
 
   # substitutes:
@@ -47,7 +49,7 @@ class CodeHighlighting
           # trix used to add these, not sure if needed now because trix is no longer used
           code_content.gsub! /<br>/, ''
         end
-        code_content = sanitize_code(code_content).html_safe
+        code_content = sanitize_code(code_content)
         orig_lang = lang
         lang = lang.downcase
         lexer = if lang.in?(SUPPORTED_LANG_NAMES)
@@ -71,40 +73,37 @@ class CodeHighlighting
         beg_match_before, end_match_before = m.offset(0)
         _beg_match_code, end_match_code = m.offset(2)
         before_content = cursor[0...beg_match_before]
-        before_content = html_escape(before_content).html_safe
+        before_content = html_escape(before_content)
         html_formatter = Rouge::Formatters::HTML.new
         formatter = Rouge::Formatters::HTMLPygments.new(html_formatter)
-        code_content = formatter.format(lexer.lex(code_content)).html_safe
+        code_content = formatter.format(lexer.lex(code_content))
 
         new_content = before_content + code_content
-        nl_without_cr = /(?<!\r)\n/
-        new_content.gsub!(nl_without_cr, "\r\n")
+        #nl_without_cr = /(?<!\r)\n/
+        #new_content.gsub!(nl_without_cr, "\r\n")
         content_buf << new_content
         cursor = cursor[end_match_code+3..-1] # +3 for ```
+        @num_substitutions += 1
         break if cursor.empty?
       else
         break
       end
     end
 
-    content_buf << html_escape(cursor).html_safe unless cursor.empty?
+    content_buf << html_escape(cursor) unless cursor.empty?
 
     content_buf.join
   end
 
   private
 
-  # don't pollute this namespace with all these methods, so use another
-  HTML_HELPER = (Class.new do
-    include ActionView::Helpers::TagHelper # for escape_once
-    include ActionView::Helpers::SanitizeHelper # for sanitize
-  end).new
+  HELPERS = ActionController::Base.helpers
 
   def html_escape(string)
     if @input_is_html_safe
       string
     else
-      HTML_HELPER.escape_once(string)
+      HELPERS.escape_once(string).to_str
     end
   end
 
@@ -121,7 +120,7 @@ class CodeHighlighting
     if @input_is_html_safe
       code_content
     else
-      HTML_HELPER.sanitize code_content, scrubber: CODE_SCRUBBER
+      HELPERS.sanitize(code_content, scrubber: CODE_SCRUBBER).to_str
     end
   end
 end

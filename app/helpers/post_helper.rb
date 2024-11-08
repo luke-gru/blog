@@ -15,8 +15,8 @@ module PostHelper
     when :en
       post.erb_content
     when :fr
-      if post.content_fr.present?
-        post.erb_content(content: post.content_fr)
+      if post.content_fr_processed.present?
+        post.erb_content(content: post.content_fr_processed)
       else
         post.erb_content
       end

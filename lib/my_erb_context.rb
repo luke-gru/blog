@@ -16,7 +16,7 @@ class MyErbContext < Erubis::Context
     Rails.application.routes
   end
 
-  def controller
+  def controller # this is needed
   end
 
   def default_url_options

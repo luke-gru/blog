@@ -32,6 +32,22 @@ class Post < ApplicationRecord
     self.content_fr_duplicate && self.content_fr.blank?
   end)
 
+  before_save(:sanitize_content, if: lambda do
+    self.content_changed?
+  end)
+
+  before_save(:sanitize_content_fr, if: lambda do
+    self.content_fr_changed?
+  end)
+
+  before_save(:process_content, if: lambda do
+    self.content_changed? || (self.content_processed.blank? && self.content.present?)
+  end)
+
+  before_save(:process_content_fr, if: lambda do
+    self.content_fr_changed? || (self.content_fr_processed.blank? && self.content_fr.present?)
+  end)
+
   after_save_commit(:send_emails_to_subscribers, if: lambda do
     self.first_published_now
   end)
@@ -83,7 +99,10 @@ class Post < ApplicationRecord
   end
 
   # @return String
-  def erb_content(content: self.content)
+  def erb_content(content: self.content_processed)
+    if content.blank?
+      content = self.content
+    end
     template = Erubis::Eruby.new(content, pattern: "{% %}")
     context = MyErbContext.new(post: self)
     template.evaluate(context)
@@ -109,6 +128,45 @@ class Post < ApplicationRecord
   # callback
   def set_content_fr_defaults
     self.content_fr = self.content
+  end
+
+  # callback
+  def sanitize_content
+    do_sanitize_content(:content)
+  end
+
+  # callback
+  def sanitize_content_fr
+    do_sanitize_content(:content_fr)
+  end
+
+  # callback
+  def process_content
+    do_process_content(:content)
+  end
+
+  # callback
+  def process_content_fr
+    do_process_content(:content_fr)
+  end
+
+  def do_sanitize_content(field)
+    val = send(field)
+    if val.present?
+      val = val.gsub(/\r\n/, "\n")
+      send("#{field}=", val)
+    end
+  end
+
+  def do_process_content(field)
+    raw_content = send(field) || ''
+    hl = CodeHighlighting.new(raw_content, input_is_html_safe: true)
+    if (new_content = hl.substitute_code_templates)
+      Rails.logger.info "Code highlight substitutions for Post #{self.id} (#{field}): #{hl.num_substitutions}"
+      send("#{field}_processed=", new_content)
+    elsif highlight.error
+      Rails.logger.error "Error highlighting code for Post #{self.id}: #{hl.error}"
+    end
   end
 
   # callback

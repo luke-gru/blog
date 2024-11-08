@@ -82,27 +82,13 @@ ActiveAdmin.register Post do
 
   controller do
     helper "active_admin/view"
-    before_action :set_content, only: [:update]
 
     def permitted_params
       params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
         post: [
-          :user_id, :title, :title_fr, :content, :content_fr_duplicate, :content_fr, :status, :images, :tag_ids => [],
+          :user_id, :title, :title_fr, :content, :content_fr, :content_fr_duplicate, :status, :images, :tag_ids => [],
         ]
       )
-    end
-
-    private
-
-    def set_content
-      raw_content = params[:post][:content] || ''
-      highlight = CodeHighlighting.new(raw_content, input_is_html_safe: true)
-      if (new_content = highlight.substitute_code_templates)
-        params[:post][:content] = new_content
-      elsif highlight.error
-        flash[:error] = highlight.error
-        redirect_back(fallback_location: admin_post_path(id: params[:id]))
-      end
     end
   end
 
