@@ -11,22 +11,22 @@ class PostContentProcessing
 
   # @return String, new string
   def process
-    footnotes_found = {ptr: {}, exp: {}} # set of found footnotes
+    footnotes_found = {ref: {}, note: {}} # set of found footnotes
     scrubber = Loofah::Scrubber.new do |node|
       case node.name
       when "filename"
         process_filename_tag(node)
-      when "footnote-ptr"
-        process_footnote_ptr_tag(node, footnotes_found)
-      when "footnote-exp"
-        process_footnote_exp_tag(node, footnotes_found)
+      when "footnote-ref"
+        process_footnote_ref_tag(node, footnotes_found)
+      when "footnote-note"
+        process_footnote_note_tag(node, footnotes_found)
       when "text"
         process_backticks(node)
       end
     end
     result = Loofah.scrub_html4_fragment(@content, scrubber).to_s
-    if @strict && (footnotes_found[:ptr].keys.sort != footnotes_found[:exp].keys.sort)
-      raise FootnoteStrictCheckError, "footnote ptrs: #{footnotes_found[:ptr].keys.sort}, footnote exp: #{footnotes_found[:exp].keys.sort}"
+    if @strict && (footnotes_found[:ref].keys.sort != footnotes_found[:note].keys.sort)
+      raise FootnoteStrictCheckError, "footnote refs: #{footnotes_found[:ref].keys.sort}, footnote note: #{footnotes_found[:note].keys.sort}"
     end
     result
   end
@@ -45,32 +45,32 @@ class PostContentProcessing
     node.set_attribute(:class, "post-filename")
   end
 
-  # <footnote-ptr num=1 /> => <a href="#footnote1" class="post-footnote-ptr">[1]</a>
-  def process_footnote_ptr_tag(node, footnotes_found)
+  # <footnote-ref num=1 /> => <a href="#footnote1" class="post-footnote-ref">[1]</a>
+  def process_footnote_ref_tag(node, footnotes_found)
     num = node.get_attribute(:num).to_i
-    raise "invalid <footnote-ptr>, num=#{num}" unless num > 0
-    if footnotes_found[:ptr][num]
-      raise "<footnote-ptr num=#{num}> is already in the post"
+    raise "invalid <footnote-ref>, num=#{num}" unless num > 0
+    if footnotes_found[:ref][num]
+      raise "<footnote-ref num=#{num}> is already in the post"
     end
-    footnotes_found[:ptr][num] = true
+    footnotes_found[:ref][num] = true
     node.name = "a"
     node.remove_attribute("num")
     node.set_attribute("href", "#footnote#{num}")
-    node.set_attribute("class", "post-footnote-ptr")
+    node.set_attribute("class", "post-footnote-ref")
     node.content = "[#{num}]"
   end
 
-  # <footnote-exp num=1>Explanation</footnote-exp> => <p class="footnote-explanation"><a target="#footnote1">[1]</a> Explanation</p>
-  def process_footnote_exp_tag(node, footnotes_found)
+  # <footnote-note num=1>Explanation</footnote-note> => <p class="post-footnote-note"><a target="#footnote1">[1]</a> Explanation</p>
+  def process_footnote_note_tag(node, footnotes_found)
     num = node.get_attribute(:num).to_i
     raise "invalid <footnote-exp>, num=#{num}" unless num > 0
-    if footnotes_found[:exp][num]
-      raise "<footnote-exp num=#{num}> is already in the post"
+    if footnotes_found[:note][num]
+      raise "<footnote-note num=#{num}> is already in the post"
     end
-    footnotes_found[:exp][num] = true
+    footnotes_found[:note][num] = true
     node.name = "p"
     node.remove_attribute("num")
-    node.set_attribute("class", "footnote-explanation")
+    node.set_attribute("class", "post-footnote-note")
     text = node.text
     node.content = "" # clear the text
     node.add_child(%Q(<a target="#footnote1">[#{num}]</a> #{text}))
