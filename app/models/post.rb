@@ -86,21 +86,6 @@ class Post < ApplicationRecord
     %Q(<div id="post-content-wrapper">#{content}</div>)
   end
 
-  # TODO: what if malformatted?
-  # @return String, properly indented HTML with newlines after each tag
-  def indented_content(lang: "en", newline: "\n")
-    html = content_with_wrapper(lang: lang)
-    doc = Nokogiri::XML(html, &:noblanks)
-    doc.css("#post-content-wrapper").children.map do |node|
-      if node.node_name == "div" && node.attributes["class"]&.value == "highlight"
-        # there's a <pre> block in it so we don't want to add any spaces in it
-        node.to_html
-      else
-        node.to_s + newline
-      end
-    end.join
-  end
-
   # @return String
   def erb_content(content: self.content_processed)
     if content.blank?
@@ -174,7 +159,7 @@ class Post < ApplicationRecord
         Rails.logger.error "Error in PostContentProcessing for Post #{self.id}: #{e.message}"
       end
     # don't set field
-    elsif highlight.error
+    elsif hl.error
       Rails.logger.error "Error highlighting code for Post #{self.id}: #{hl.error}"
     end
   end

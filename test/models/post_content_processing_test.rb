@@ -62,10 +62,10 @@ SRC
 
   def test_process_backticks
     src = <<SRC.rstrip
-Make sure to update the `class` and `def` keywords.
+<p>Make sure to update the `class` and `def` keywords.</p>
 SRC
     result = process(src)
-    assert_equal %Q(Make sure to update the <span class="post-highlight">class</span> and <span class="post-highlight">def</span> keywords.), result
+    assert_equal %Q(<p>Make sure to update the <span class="post-highlight">class</span> and <span class="post-highlight">def</span> keywords.</p>), result
   end
 
   private

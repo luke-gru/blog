@@ -21,7 +21,9 @@ class PostContentProcessing
       when "footnote-note"
         process_footnote_note_tag(node, footnotes_found)
       when "text"
-        process_backticks(node)
+        if node.parent && node.parent.name == "p"
+          process_backticks(node)
+        end
       end
     end
     result = Loofah.scrub_html4_fragment(@content, scrubber).to_s
@@ -49,8 +51,8 @@ class PostContentProcessing
   def process_footnote_ref_tag(node, footnotes_found)
     num = node.get_attribute(:num).to_i
     raise "invalid <footnote-ref>, num=#{num}" unless num > 0
-    if footnotes_found[:ref][num]
-      raise "<footnote-ref num=#{num}> is already in the post"
+    if @strict && footnotes_found[:ref][num]
+      raise FootnoteStrictCheckError, "<footnote-ref num=#{num}> is already in the post"
     end
     footnotes_found[:ref][num] = true
     node.name = "a"
@@ -64,8 +66,8 @@ class PostContentProcessing
   def process_footnote_note_tag(node, footnotes_found)
     num = node.get_attribute(:num).to_i
     raise "invalid <footnote-exp>, num=#{num}" unless num > 0
-    if footnotes_found[:note][num]
-      raise "<footnote-note num=#{num}> is already in the post"
+    if @strict && footnotes_found[:note][num]
+      raise FootnoteStrictCheckError, "<footnote-note num=#{num}> is already in the post"
     end
     footnotes_found[:note][num] = true
     node.name = "p"
@@ -82,8 +84,8 @@ class PostContentProcessing
       %Q(<span class="post-highlight">#{inner[1...-1]}</span>)
     end
     if node.text != res
-      node.content = ""
-      node.parent.add_child(res)
+      new_nodes = Nokogiri::XML::fragment(res)
+      node.replace(new_nodes)
     end
   end
 end

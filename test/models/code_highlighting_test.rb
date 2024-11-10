@@ -89,6 +89,23 @@ SRC
     refute_match /```/, result
   end
 
+  def test_inline_bug
+    src = <<SRC
+<p>
+We could create a helper method for formatting time in this example and either add that
+method in the context class, pass a lambda into the input vars of the initializer or extend the context
+object with a method after initialization. Let's say we want to access the `link_to` helper method to generate an `a`
+tag. For that, we just need to include the proper module into the context class, in this case it's ```ruby(inline) ActionView::Helpers::UrlHelper```.
+Want all the helper methods available to regular Rails templates? Include ```ruby(inline) ActionView::Helpers``` itself.
+</p>
+SRC
+    hl = CodeHighlighting.new(src, input_is_html_safe: true)
+    result = hl.substitute_code_templates
+    assert_nil hl.error
+    assert_replacements(result, 2, container_element: "span")
+    refute_match /```/, result
+  end
+
   def test_not_html_safe_gets_escaped_outside_code
     src = <<SRC
 <script>xssAttack()</script>
@@ -172,6 +189,9 @@ SRC
 
   def assert_replacements(result, num, container_element: "div")
     klass = "highlight"
+    if container_element == "span"
+      klass += " highlight-inline"
+    end
     ce = container_element
     case num
     when 0

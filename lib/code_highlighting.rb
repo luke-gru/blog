@@ -2,9 +2,9 @@
 class CodeHighlighting
   class HTMLPygmentsSpanContainer < Rouge::Formatters::HTMLPygments
     def stream(tokens, &b)
-      yield %(<span class="highlight"><pre class="#{@css_class}"><code>)
+      yield %Q(<span class="highlight highlight-inline"><span class="#{@css_class}">)
       @inner.stream(tokens, &b)
-      yield "</code></pre></span>"
+      yield "</span></span>"
     end
   end
 
@@ -14,8 +14,8 @@ class CodeHighlighting
     "ruby" => :Ruby,
     "rb"   => :Ruby,
     "c"    => :C,
-    "javascript" => :Javascript, 
-    "js" => :Javascript, 
+    "javascript" => :Javascript,
+    "js" => :Javascript,
     "html" => :HTML,
     "css" => :CSS,
     "yaml" => :YAML,

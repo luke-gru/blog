@@ -19,7 +19,7 @@
 
     <%= render :partial => 'admin/wysiwyg/editor',
       locals: {
-        html: @post.indented_content,
+        html: @post.content,
         input_name: "post[content]",
         form_selector: "form.formtastic.post",
         lang: "en",
@@ -37,7 +37,7 @@
       </li>
       <%= render :partial => 'admin/wysiwyg/editor',
         locals: {
-          html: @post.indented_content(lang: "fr"),
+          html: @post.content_fr,
           input_name: "post[content_fr]",
           form_selector: "form.formtastic.post",
           lang: "fr",

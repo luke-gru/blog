@@ -11,12 +11,6 @@ TMPL
     assert_equal "<p>Hi</p>\n", p.erb_content
   end
 
-  def test_indented_content
-    content = %Q(<div><img src="/my/image.png" /></div>)
-    p = Post.new(content: content)
-    assert_equal %Q(<div>\n  <img src="/my/image.png"/>\n</div>\n), p.indented_content
-  end
-
   def test_sends_emails_out_created_status_published
     post = nil
     assert_enqueued_with(job: NewPostEmailSubscribersJob) do
