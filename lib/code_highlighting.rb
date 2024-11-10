@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 class CodeHighlighting
+  class HTMLPygmentsSpanContainer < Rouge::Formatters::HTMLPygments
+    def stream(tokens, &b)
+      yield %(<span class="highlight"><pre class="#{@css_class}"><code>)
+      @inner.stream(tokens, &b)
+      yield "</code></pre></span>"
+    end
+  end
 
   # The initial list of supported languages and how I want to name them.
   # This list can grow at runtime.
@@ -43,8 +50,14 @@ class CodeHighlighting
     content_buf = []
     # ex: replace ```ruby\nputs "HI"``` with proper pygment HTML tags
     while true
-      if m = cursor.match(/```(\w+)\s*(.+?)```/m)
+      if m = cursor.match(/```([\w()]+)\s*(.+?)```/m)
+        inline_template = false
         lang, code_content = m.captures
+        # allow ```ruby(inline) ActionController::Base.helpers```
+        if lang.ends_with?("(inline)")
+          inline_template = true
+          lang = lang.sub("(inline)", "")
+        end
         if @input_is_html_safe
           # trix used to add these, not sure if needed now because trix is no longer used
           code_content.gsub! /<br>/, ''
@@ -75,7 +88,11 @@ class CodeHighlighting
         before_content = cursor[0...beg_match_before]
         before_content = html_escape(before_content)
         html_formatter = Rouge::Formatters::HTML.new
-        formatter = Rouge::Formatters::HTMLPygments.new(html_formatter)
+        if inline_template
+          formatter = HTMLPygmentsSpanContainer.new(html_formatter)
+        else
+          formatter = Rouge::Formatters::HTMLPygments.new(html_formatter)
+        end
         code_content = formatter.format(lexer.lex(code_content))
 
         new_content = before_content + code_content

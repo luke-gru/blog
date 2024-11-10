@@ -78,6 +78,17 @@ SRC
     refute_match /```/, result
   end
 
+  def test_inline_code_template
+    src = <<SRC
+<p>Make sure to have a ```ruby(inline) ActionView::Helper``` class</p>
+SRC
+    hl = CodeHighlighting.new(src, input_is_html_safe: true)
+    result = hl.substitute_code_templates
+    assert_nil hl.error
+    assert_replacements(result, 1, container_element: "span")
+    refute_match /```/, result
+  end
+
   def test_not_html_safe_gets_escaped_outside_code
     src = <<SRC
 <script>xssAttack()</script>
@@ -159,16 +170,17 @@ SRC
 
   private
 
-  def assert_replacements(result, num)
+  def assert_replacements(result, num, container_element: "div")
     klass = "highlight"
+    ce = container_element
     case num
     when 0
-      refute_match /<div class="#{klass}">/m, result
+      refute_match /<#{ce} class="#{klass}">/m, result
     when 1
-      assert_match /<div class="#{klass}">/m, result
-      refute_match /<div class="#{klass}">(.+?)<div class="#{klass}">/m, result
+      assert_match /<#{ce} class="#{klass}">/m, result
+      refute_match /<#{ce} class="#{klass}">(.+?)<#{ce} class="#{klass}">/m, result
     when 2
-      assert_match /<div class="#{klass}">(.+?)<div class="#{klass}">/m, result
+      assert_match /<#{ce} class="#{klass}">(.+?)<#{ce} class="#{klass}">/m, result
     else
       raise ArgumentError, "num should be 1 or 2, is: #{num}"
     end

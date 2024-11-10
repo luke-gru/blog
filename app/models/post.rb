@@ -22,6 +22,7 @@ class Post < ApplicationRecord
 
   attr_accessor :first_published_now
   attr_accessor :content_fr_duplicate # for active admin form
+  attr_accessor :force_content_processing
 
   before_save(:set_first_published_at, if: lambda do
     before_published_at = changes["first_published_at"]
@@ -41,11 +42,13 @@ class Post < ApplicationRecord
   end)
 
   before_save(:process_content, if: lambda do
-    self.content_changed? || (self.content_processed.blank? && self.content.present?)
+    self.force_content_processing || self.content_changed? ||
+      (self.content_processed.blank? && self.content.present?)
   end)
 
   before_save(:process_content_fr, if: lambda do
-    self.content_fr_changed? || (self.content_fr_processed.blank? && self.content_fr.present?)
+    self.force_content_processing || self.content_fr_changed? ||
+      (self.content_fr_processed.blank? && self.content_fr.present?)
   end)
 
   after_save_commit(:send_emails_to_subscribers, if: lambda do
@@ -163,7 +166,14 @@ class Post < ApplicationRecord
     hl = CodeHighlighting.new(raw_content, input_is_html_safe: true)
     if (new_content = hl.substitute_code_templates)
       Rails.logger.info "Code highlight substitutions for Post #{self.id} (#{field}): #{hl.num_substitutions}"
-      send("#{field}_processed=", new_content)
+      begin
+        new_content = PostContentProcessing.new(new_content, strict: true).process
+        send("#{field}_processed=", new_content)
+      rescue PostContentProcessing::Error => e
+        # don't set field
+        Rails.logger.error "Error in PostContentProcessing for Post #{self.id}: #{e.message}"
+      end
+    # don't set field
     elsif highlight.error
       Rails.logger.error "Error highlighting code for Post #{self.id}: #{hl.error}"
     end
