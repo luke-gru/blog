@@ -18,6 +18,8 @@ module RailsProject
 
     config.time_zone = 'Eastern Time (US & Canada)'
 
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

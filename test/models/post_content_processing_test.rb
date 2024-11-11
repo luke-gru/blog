@@ -8,7 +8,7 @@ class PostContentProcessingTest < ActiveSupport::TestCase
 Here's a file: <filename>test.rb</filename>
 SRC
     result = process(src)
-    assert_equal %Q(Here's a file: <p class="#{FILENAME_CLASS}">test.rb</p>), result
+    assert_equal %Q(Here's a file: <p class="#{FILENAME_CLASS}"><span>test.rb</span></p>), result
   end
 
   def test_process_filename_inline_tag
@@ -65,7 +65,7 @@ SRC
 <p>Make sure to update the `class` and `def` keywords.</p>
 SRC
     result = process(src)
-    assert_equal %Q(<p>Make sure to update the <span class="post-highlight">class</span> and <span class="post-highlight">def</span> keywords.</p>), result
+    assert_equal %Q(<p>Make sure to update the <code class="post-highlight">class</code> and <code class="post-highlight">def</code> keywords.</p>), result
   end
 
   private

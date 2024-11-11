@@ -14,16 +14,17 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
-    />
+
+    <%# TODO: host own %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
     <script src="https://kit.fontawesome.com/f334992970.js" crossorigin="anonymous"></script>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="container mx-auto">
+  <body class="container mx-auto blog-content-container">
     <nav id="main-nav" class="">
       <div id="nav-lang">
         <a id="nav-lang-item-first" class="<%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
