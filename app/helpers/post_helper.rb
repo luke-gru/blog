@@ -6,7 +6,7 @@ module PostHelper
       post.title
     when :fr
       post.title_fr.presence || post.title
-    end
+    end.to_s
   end
 
   # @param post Post
@@ -20,7 +20,16 @@ module PostHelper
       else
         post.erb_content
       end
-    end
+    end.to_s
+  end
+
+  def post_meta_description(post)
+    case I18n.locale
+    when :en
+      post.meta_description
+    when :fr
+    post.meta_description_fr.presence || post.meta_description
+    end.to_s
   end
 
   # @param tag Tag
@@ -30,6 +39,7 @@ module PostHelper
       tag.tag
     when :fr
       tag.tag_fr.presence || tag.tag
-    end
+    end.to_s
   end
+
 end

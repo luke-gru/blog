@@ -12,7 +12,7 @@
 
 ## Development dependencies:
 
-All server dependencies
+All server dependencies except sshd. Docker is optional.
 
 ## Development Setup:
 

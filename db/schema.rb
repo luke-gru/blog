@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_08_182316) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_224600) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -128,6 +128,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_182316) do
     t.string "slug"
     t.text "content_processed"
     t.text "content_fr_processed"
+    t.text "meta_description"
+    t.text "meta_description_fr"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["user_id"], name: "index_posts_on_user_id"
   end

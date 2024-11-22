@@ -38,6 +38,12 @@ ActiveAdmin.register Post do
           nil
         end
       end
+      row "Meta Description" do |p|
+        p.meta_description.to_s
+      end
+      row "Meta Description (FR)" do |p|
+        p.meta_description_fr.to_s
+      end
       row :status
       row :first_published_at
       row "Content (EN)" do |p|
@@ -86,25 +92,11 @@ ActiveAdmin.register Post do
     def permitted_params
       params.permit(:utf8, :_method, :authenticity_token, :commit, :id, :locale,
         post: [
-          :user_id, :title, :title_fr, :content, :content_fr, :content_fr_duplicate, :status, :images, :tag_ids => [],
+          :user_id, :title, :title_fr, :content, :content_fr, :content_fr_duplicate,
+          :meta_description, :meta_description_fr, :status, :images, :tag_ids => [],
         ]
       )
     end
   end
 
-  # TODO: get preview working
-  # JSON request
-  # /admin/posts/:id/preview_content
-  member_action :preview_content do
-    post = Post.find_by_id(params[:id])
-    unless post
-      render json: { 
-        error: "Post not found"
-      }, status: 404
-      return
-    end
-    render :json => {
-      html: render_to_string(partial: "/posts/post", locals: { post: post }, layout: false)
-    }
-  end
 end

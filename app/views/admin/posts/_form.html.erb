@@ -11,6 +11,8 @@
     <%= f.input :user %>
     <%= f.input :title, as: :string, label: "Title (EN)" %>
     <%= f.input :title_fr, as: :string, label: "Title (FR)" %>
+    <%= f.input :meta_description, as: :text, label: "Meta Description (EN)", input_html: { style: "max-height: 100px;" }  %>
+    <%= f.input :meta_description_fr, as: :text, label: "Meta Description (FR)", input_html: { style: "max-height: 100px;" } %>
     <%= f.input :status, include_blank: false %>
 
     <li class="string input">
@@ -60,18 +62,6 @@
         <input type="submit" name="commit" value="Create Post" />
       <% end %>
     </li>
-    <%#<li class="action input_action" id="post_preview_action">%>
-      <%#<input type="button" name="preview" value="Preview Post" />%>
-    <%#</li>%>
   <% end %>
 <% end %>
 
-<script>
-  // TODO
-  $("#post_preview_action").click(async (e) => {
-    let content = $("#post_content")[0].value
-    let actionUrl = $("form.formtastic")[0].action
-    let response = await fetch(`${actionUrl}/preview_content`)
-    console.log(await response.json())
-  })
-</script>

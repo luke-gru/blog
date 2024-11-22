@@ -13,6 +13,6 @@ User.create!(
   password_confirmation: 'password',
   confirmed_at: 3.days.ago,
   first_name: "Admin",
-  last_Name: "",
+  last_name: "",
   admin: true,
 ) if Rails.env.development?

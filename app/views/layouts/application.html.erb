@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Luke's Blog" %></title>
+    <title><%= content_for(:title) || "luke-gru.net - All Posts" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
+    <% if content_for(:meta_description) %>
+      <meta name="description" content="<%= content_for(:meta_description) %>">
+    <% else %>
+      <meta name="description" content="luke-gru.net: A technology blog focused on programming in Ruby on Rails and more">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
