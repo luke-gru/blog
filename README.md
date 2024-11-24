@@ -72,5 +72,5 @@ If you get permissions errors, make sure a docker group has been created and set
 
 ## Deployment
 
-Deployment uses kamal
+Deployment uses kamal. Needs docker engine to be installed locally.
 

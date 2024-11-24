@@ -32,7 +32,7 @@ SRC
 <footnote-note num=1>See my paper for more details</footnote-note>
 SRC
     result = process(src)
-    assert_equal %Q(<p class="post-footnote-note"><a target="#footnote1">[1]</a> See my paper for more details</p>), result
+    assert_equal %Q(<p class="post-footnote-note"><span id="footnote1">[1]</span> See my paper for more details</p>), result
   end
 
   def test_process_multiple_footnotes

@@ -1,6 +1,6 @@
-<%# locals: post (Post) %>
+<%# locals: post: Post %>
 <div class="post my-8">
-  <div class="post-title text-4xl font-semibold">
+  <h1 class="post-title text-4xl font-semibold">
     <% if controller.action_name == "index"  %>
       <%= link_to post_title(post), post_page_path(post), class: "hover-link" %>
     <% else %>
@@ -9,7 +9,7 @@
     <% if !post.published? %> <%# only admins can view the post %>
       (<%= post.status %>)
     <% end %>
-  </div>
+  </h1>
 
   <div class="post-content mt-5">
     <%= post_erb_content(post).html_safe %>

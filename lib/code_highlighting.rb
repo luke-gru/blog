@@ -31,10 +31,13 @@ class CodeHighlighting
   SUPPORTED_LANG_NAMES = SUPPORTED_LANGS.keys
 
   attr_reader :error, :num_substitutions
-  
-  def initialize(content, input_is_html_safe: false)
+
+  RubySyntaxCheckFailure = Class.new(StandardError)
+
+  def initialize(content, input_is_html_safe: false, check_ruby_syntax: true)
     @content = content
     @input_is_html_safe = input_is_html_safe
+    @check_ruby_syntax = check_ruby_syntax
     @error = nil
     @num_substitutions = 0
   end
@@ -60,11 +63,22 @@ class CodeHighlighting
         end
         if @input_is_html_safe
           # trix used to add these, not sure if needed now because trix is no longer used
-          code_content.gsub! /<br>/, ''
+          code_content.gsub!(/<br>/, '')
         end
         code_content = sanitize_code(code_content)
         orig_lang = lang
         lang = lang.downcase
+        if lang == "ruby" && @check_ruby_syntax
+          Tempfile.create("code_content") do |f|
+            f.write code_content
+            f.flush
+            # TODO: capture stderr and put it in error message
+            system("#{RbConfig.ruby} -c #{f.path} > /dev/null 2>&1")
+            unless $?.exitstatus == 0
+              raise RubySyntaxCheckFailure, code_content
+            end
+          end
+        end
         lexer = if lang.in?(SUPPORTED_LANG_NAMES)
           Rouge::Lexers.const_get(SUPPORTED_LANGS[lang]).new
         # ex: ```Kotlin or ```kotlin
@@ -83,7 +97,7 @@ class CodeHighlighting
           @error = "Unable to parse language '#{lang}'"
           return
         end
-        beg_match_before, end_match_before = m.offset(0)
+        beg_match_before, _end_match_before = m.offset(0)
         _beg_match_code, end_match_code = m.offset(2)
         before_content = cursor[0...beg_match_before]
         before_content = html_escape(before_content)
