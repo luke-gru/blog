@@ -1,4 +1,4 @@
-# My Blog
+# My Blog (luke-gru.net)
 
 ## Server dependencies:
 
@@ -12,7 +12,7 @@
 
 ## Development dependencies:
 
-All server dependencies except sshd. Docker is optional.
+All server dependencies except sshd. Docker is optional except during deployment.
 
 ## Development Setup:
 
@@ -72,5 +72,6 @@ If you get permissions errors, make sure a docker group has been created and set
 
 ## Deployment
 
-Deployment uses kamal. Needs docker engine to be installed locally.
+Deployment uses kamal. Needs docker engine to be installed locally and certain environment
+variables to be set.
 
