@@ -33,19 +33,17 @@
     <%= javascript_importmap_tags %>
   </head>
 
+  <body class="container mx-auto blog-content-container">
   <% if Rails.env.production? %>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4WRMYV4H6"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-G4WRMYV4H6');
+      (function(){
+        var fullres = document.createElement('script');
+        fullres.async = true;
+        fullres.src = 'https://t.fullres.net/lukegru.js?'+(new Date()-new Date()%43200000);
+        document.head.appendChild(fullres);
+      })();
     </script>
   <% end %>
-
-  <body class="container mx-auto blog-content-container">
     <nav id="main-nav" class="">
       <div id="nav-lang">
         <a id="nav-lang-item-first" class="<%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
