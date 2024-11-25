@@ -33,6 +33,18 @@
     <%= javascript_importmap_tags %>
   </head>
 
+  <% if Rails.env.production? %>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4WRMYV4H6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-G4WRMYV4H6');
+    </script>
+  <% end %>
+
   <body class="container mx-auto blog-content-container">
     <nav id="main-nav" class="">
       <div id="nav-lang">
