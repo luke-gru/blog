@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     get  "posts/subscribe-confirm/:token", to: "posts#subscribe_confirm", as: :posts_subscribe_confirm
     get  "posts/:id", to: "posts#show", as: :post_page
 
+    get "projects", to: "general#projects", as: :projects_page
+    get "about", to: "general#about", as: :about_page
+    get "socials", to: "general#socials", as: :socials_page
+
     defaults format: :json do
       get    "post-comments/:post_id", to: "post_comments#index", as: :post_comments
       post   "post-comments/:post_id/create", to: "post_comments#create", as: :post_comments_create

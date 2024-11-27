@@ -33,31 +33,78 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="container mx-auto blog-content-container">
-  <% if Rails.env.production? %>
-    <script>
-      (function(){
-        var fullres = document.createElement('script');
-        fullres.async = true;
-        fullres.src = 'https://t.fullres.net/lukegru.js?'+(new Date()-new Date()%43200000);
-        document.head.appendChild(fullres);
-      })();
-    </script>
-  <% end %>
-    <nav id="main-nav" class="">
-      <div id="nav-lang">
-        <a id="nav-lang-item-first" class="<%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
-          <span class="fi fi-gb">
-          </span>
+  <body>
+    <% if Rails.env.production? %>
+      <script>
+        (function(){
+          var fullres = document.createElement('script');
+          fullres.async = true;
+          fullres.src = 'https://t.fullres.net/lukegru.js?'+(new Date()-new Date()%43200000);
+          document.head.appendChild(fullres);
+        })();
+      </script>
+    <% end %>
+    <header id="navbar">
+      <nav class="navbar-container">
+        <a href="<%= root_path %>" class="home-link">
+          <div class="navbar-logo"></div>
+          luke-gru.net
         </a>
-        <a href="<%= my_current_path(:locale => :fr) %>" class="<%= 'active' if I18n.locale == :fr %>">
-          <span class="fi fi-fr">
-          </span>
-        </a>
-      </div>
-    </nav>
 
-    <main class="mt-8 lg:px-20 md:px-10 px-4">
+        <button type="button" id="navbar-toggle" aria-controls="navbar-menu" aria-label="Toggle menu" aria-expanded="false">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div id="navbar-menu" aria-labelledby="navbar-toggle">
+          <ul class="navbar-links">
+            <li class="navbar-item navbar-item-search">
+              <section id="posts-search-menu" class="<%= params[:search].present? ? "" : "hidden" %>">
+                <form action="<%= posts_page_path %>" method="get">
+                  <input type="text" name="search" placeholder="Search posts" value="<%= params[:search] %>" />
+                </form>
+              </section>
+              <button class="btn-primary navbar-btn-search">
+                <i class="fa fa-search"></i>
+              </button>
+            </li>
+            <li class="navbar-item"><a class="navbar-link" href="<%= posts_page_path %>">Posts</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="<%= projects_page_path %>">Projects</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="<%= about_page_path %>">About</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="<%= socials_page_path %>">Socials</a></li>
+            <li class="navbar-item">
+              <a id="nav-lang-item-first" class="navbar-lang-link <%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
+                <span class="fi fi-gb">
+                </span>
+              </a>
+            </li>
+            <li class="navbar-item">
+              <a href="<%= my_current_path(:locale => :fr) %>" class="navbar-lang-link <%= 'active' if I18n.locale == :fr %>">
+                <span class="fi fi-fr">
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div class="container mx-auto blog-content-container">
+  <!--
+    <nav id="main-nav" class="">
+    <div id="nav-lang">
+      <a id="nav-lang-item-first" class="<%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
+        <span class="fi fi-gb">
+        </span>
+      </a>
+      <a href="<%= my_current_path(:locale => :fr) %>" class="<%= 'active' if I18n.locale == :fr %>">
+        <span class="fi fi-fr">
+        </span>
+      </a>
+    </div>
+  </nav>
+  -->
+
+    <main class="lg:px-20 md:px-10 px-4">
 
       <% if (notice = flash[:notice].presence) || flash[:error].present? %>
         <div class="flashes">
@@ -75,18 +122,56 @@
 
       <%= yield %>
     </main>
+  </div>
 
-    <footer>
-      <% unless defined?(@skip_footer_subscribe_form) && @skip_footer_subscribe_form %>
-        <div id="email-subscribe-container">
-          <p id="email-subscribe-text">Receive an email when a new post has been made</p>
-          <%= form_with(url: posts_subscribe_url) do |f| %>
-            <%= f.email_field :subscribe_email, required: true, placeholder: "my@email.com" %>
-            <%= f.submit "Subscribe", class: "btn-primary" %>
-          <% end %>
-        </div>
-      <% end %>
-    </footer>
+  <footer>
+    <% unless defined?(@skip_footer_subscribe_form) && @skip_footer_subscribe_form %>
+      <div id="email-subscribe-container">
+        <p id="email-subscribe-text">Receive an email when I post something new</p>
+        <%= form_with(url: posts_subscribe_url) do |f| %>
+          <%= f.email_field :subscribe_email, required: true, placeholder: "my@email.com" %>
+          <%= f.submit "Subscribe", class: "btn-primary" %>
+        <% end %>
+      </div>
+    <% end %>
+  </footer>
 
+  <script>
+    (function() {
+      const navbar = document.querySelector("#navbar");
+
+      const origSearchBlank = <%= params[:search].blank? ? 'true' : 'false' %>;
+
+      const navSearchBtn = navbar.querySelector(".navbar-btn-search");
+      const navSearchInputContainer = navbar.querySelector("#posts-search-menu");
+      const navSearchInput = navSearchInputContainer.querySelector("input");
+      const navSearchForm = navSearchInputContainer.querySelector("form");
+
+      navSearchBtn.addEventListener("click", (e) => {
+        if (navSearchInput.value.trim() == '' && origSearchBlank) {
+          navSearchInputContainer.classList.toggle("hidden");
+        } else {
+          navSearchForm.submit();
+        }
+      })
+
+      const navbarToggle = navbar.querySelector("#navbar-toggle");
+      const navbarMenu = document.querySelector("#navbar-menu");
+      const navbarLinksContainer = navbarMenu.querySelector(".navbar-links");
+      let isNavbarExpanded = navbarToggle.getAttribute("aria-expanded") === "true";
+
+      const toggleNavbarVisibility = () => {
+        isNavbarExpanded = !isNavbarExpanded;
+        navbarToggle.setAttribute("aria-expanded", isNavbarExpanded);
+      };
+
+      navbarToggle.addEventListener("click", toggleNavbarVisibility);
+
+      navbarLinksContainer.addEventListener("click", (e) => e.stopPropagation());
+      navbarMenu.addEventListener("click", toggleNavbarVisibility);
+
+
+    })()
+  </script>
   </body>
 </html>

@@ -358,7 +358,7 @@ ActiveAdmin.setup do |config|
 
   config.before_action do
     authenticate_or_request_with_http_basic("Admin") do |name, password|
-      name == ENV["ADMIN_BASIC_NAME"] && password == ENV["ADMIN_BASIC_PASS"]
+      name.to_s.strip == ENV["ADMIN_BASIC_NAME"].to_s.strip && password.to_s.strip == ENV["ADMIN_BASIC_PASS"].to_s.strip
     end
   end
 end
