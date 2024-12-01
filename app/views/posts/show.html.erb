@@ -8,4 +8,4 @@
 <% content_for(:title, post_title(@post)) %>
 <% content_for(:meta_description, post_meta_description(@post)) %>
 
-<%= render :partial => 'post', locals: { post: @post } %>
+<%= render :partial => 'post', locals: { post: @post, tags: @tags, tags_param: [] } %>

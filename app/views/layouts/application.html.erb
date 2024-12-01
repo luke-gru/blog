@@ -71,15 +71,14 @@
             <li class="navbar-item"><a class="navbar-link" href="<%= posts_page_path %>">Posts</a></li>
             <li class="navbar-item"><a class="navbar-link" href="<%= projects_page_path %>">Projects</a></li>
             <li class="navbar-item"><a class="navbar-link" href="<%= about_page_path %>">About</a></li>
-            <li class="navbar-item"><a class="navbar-link" href="<%= socials_page_path %>">Socials</a></li>
             <li class="navbar-item">
-              <a id="nav-lang-item-first" class="navbar-lang-link <%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
+              <a id="nav-lang-item-first" class="navbar-lang-link navbar-link <%= 'active' if I18n.locale == :en %>" href="<%= my_current_path(:locale => :en) %>">
                 <span class="fi fi-gb">
                 </span>
               </a>
             </li>
             <li class="navbar-item">
-              <a href="<%= my_current_path(:locale => :fr) %>" class="navbar-lang-link <%= 'active' if I18n.locale == :fr %>">
+              <a href="<%= my_current_path(:locale => :fr) %>" class="navbar-lang-link navbar-link <%= 'active' if I18n.locale == :fr %>">
                 <span class="fi fi-fr">
                 </span>
               </a>

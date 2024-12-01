@@ -1,4 +1,4 @@
-<%# locals: post: Post %>
+<%# locals: post: Post, tags: Array<PostTag>, tags_param: Array<String>%>
 <div class="post my-8">
   <h1 class="post-title text-4xl font-semibold">
     <% if controller.action_name == "index"  %>
@@ -20,14 +20,13 @@
     <p class="post-time italic">Written on <%= post.user.created_at.to_date %></p>
   </section>
 
-  <% tags = post.tags.to_a %>
   <% if tags.size > 0 %>
     <div class="post-tags">
       <% tags.each do |tag| %>
-        <% if params[:tag].present? %>
-          <a class="post-tag btn-primary" href="<%= posts_page_path %>"><%= tag_name(tag) %></a>
+        <% if tags_param.present? && tags_param.include?(tag.tag) %>
+          <a class="post-tag btn-primary" href="<%= posts_page_path(:tags => tags_param.without(tag.tag)) %>"><%= tag_name(tag) %></a>
         <% else %>
-          <a class="post-tag btn-primary" href="<%= posts_page_path(:tag =>  tag.tag) %>"><%= tag_name(tag) %></a>
+          <a class="post-tag btn-primary" href="<%= posts_page_path(:tags =>  tags_param + [tag.tag]) %>"><%= tag_name(tag) %></a>
         <% end %>
       <% end %>
     </div>

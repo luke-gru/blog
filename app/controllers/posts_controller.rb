@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 class PostsController < ApplicationController
-  # @params [:search], [:tag]
+  before_action :set_tags_param, only: [:index]
+
+  # @params [:search], [:tags]
   def index
     @posts = Post.recently_published(
       search: params[:search],
-      tag: params[:tag],
+      tag: @tags_param,
     ).to_a
 
-    if params[:tag].present?
-      @tags = Tag.where(tag: params[:tag]).to_a
+    if @tags_param.present?
+      @tags = Tag.where(tag: @tags_param).to_a
     else
-      @tags = nil
+      @tags = []
+    end
+    @post_tags = {}
+    @posts.each do |p|
+      # show all tags per post, even if filtering by tag
+      @post_tags[p] = p.reload.tags.to_a
     end
   end
 
@@ -25,6 +32,7 @@ class PostsController < ApplicationController
       logger.info "Post not published, no access"
       redirect_to(posts_page_path) and return
     end
+    @tags = @post.tags.to_a
   end
 
   # TODO: move to different controller (EmailSubscriptions)
@@ -127,5 +135,14 @@ class PostsController < ApplicationController
     logger.info "Confirmation success"
     flash[:notice] = "Confirmation success."
     redirect_to(posts_page_path) and return
+  end
+
+  private
+
+  def set_tags_param
+    @tags_param = params[:tags].presence
+    unless Array === @tags_param && @tags_param.all? { |e| String === e }
+      @tags_param = []
+    end
   end
 end

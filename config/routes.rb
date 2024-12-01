@@ -24,7 +24,6 @@ Rails.application.routes.draw do
 
     get "projects", to: "general#projects", as: :projects_page
     get "about", to: "general#about", as: :about_page
-    get "socials", to: "general#socials", as: :socials_page
 
     defaults format: :json do
       get    "post-comments/:post_id", to: "post_comments#index", as: :post_comments

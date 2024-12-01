@@ -1,7 +1,19 @@
+<% if @tags.any? %>
+<div class="tags-container">
+  <p class="tags-container--text">Tags</p>
+  <% @tags.each do |tag| %>
+    <%# click to disable search on tag %>
+    <% if @tags_param.include?(tag.tag) %>
+      <a href="<%= posts_page_path(tags: @tags_param.without(tag.tag)) %>" class="menu-tag btn-primary"><%= tag_name(tag) %></a>
+    <% end %>
+  <% end %>
+</div>
+<% end %>
+
 <% if @posts.size == 0 %>
   <p id="posts-none-found">No posts found</p>
 <% else %>
   <% @posts.each do |post| %>
-    <%= render :partial => 'post', locals: { post: post } %>
+    <%= render :partial => 'post', locals: { post: post, tags: @post_tags[post], tags_param: @tags_param } %>
   <% end %>
 <% end %>
