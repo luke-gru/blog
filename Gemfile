@@ -58,7 +58,7 @@ gem "sidekiq" # background jobs
 gem "friendly_id" # url slugs
 
 gem "sassc-rails"
-gem "tailwindcss-rails", "~> 2.7"
+gem "tailwindcss-rails", "~> 3.0"
 #gem "cssbundling-rails"
 
 gem "rouge" # syntax highlighting code for blog posts
