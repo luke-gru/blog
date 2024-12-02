@@ -10,14 +10,10 @@ class NewPostEmailSubscribersJob < ApplicationJob
       return
     end
     Rails.logger.info "Performing job #{self.class} for post id:#{post_id}"
-    content = post.erb_content(content: post.content_with_wrapper)
     # TODO: use batching
     EmailSubscription.can_email.each do |sub|
       NewPostSubscriptionMailer.with(
         post_id: post_id,
-        post_title: post.title,
-        # TODO: render content on a sub.locale basis (content_fr)
-        content: content,
         sub_id: sub.id,
         unsubscribe_token: sub.unsubscribe_token,
         locale: sub.locale,

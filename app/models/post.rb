@@ -105,6 +105,28 @@ class Post < ApplicationRecord
     slug.blank? || title_changed?
   end
 
+  def duplicate_for_testing
+    p = Post.new(self.attributes.with_indifferent_access.except(:id, :updated_at, :created_at))
+    loop_iter = 1
+    max_iters = 100
+    iters = 0
+    loop do
+      p.title += " (duplicate #{loop_iter})"
+      p.title_fr += " (duplicate #{loop_iter})"
+      if p.save
+        break
+      else
+        if iters >= max_iters
+          break
+        end
+        loop_iter += 1
+        iters += 1
+        next
+      end
+    end
+    p
+  end
+
   private
 
   # callback

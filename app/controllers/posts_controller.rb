@@ -46,7 +46,7 @@ class PostsController < ApplicationController
       else
         flash[:error] = "Please confirm your account. We sent you an email with a confirmation link."
       end
-      redirect_back(fallback_location: posts_path) and return
+      redirect_back(fallback_location: posts_page_path) and return
     end
     # Otherwise, subscribe them again since they're now unsubscribed
     if sub

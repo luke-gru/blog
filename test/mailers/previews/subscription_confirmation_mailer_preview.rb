@@ -3,6 +3,9 @@ class SubscriptionConfirmationMailerPreview < ActionMailer::Preview
   def confirmation_email
     sub = EmailSubscription.where(confirmed_at: nil).last
     if !sub
+    end
+    sub = EmailSubscription.last
+    if !sub
       raise "No subscription without confirmation"
     end
     SubscriptionConfirmationMailer.with(
