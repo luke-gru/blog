@@ -3,43 +3,24 @@
 Priority:
 
 * Make site look good
-  better nav bar
-  about page
-  email templates that don't look crap
-
-* Test email templates
-
-Docker (development env):
-  - Run postgres in development mode and dump all data from sqlite into postgres
-
-Docker (production env):
-
-* Add job tests
-* Use rails caching
+  - Tags
+    show how many posts are found when searching by tag
+* Get email templates working on production side
+  - email from which email address? Check for address on namecheap or linode
+  - lookup actionmailer in production, maybe with postfix
+  - test that production email templates are working
 * French language translations:
     - Add french translations to blog posts
     - Add static translations
-
-* Setup proper background jobs
-  - See if I can use solid-queue for jobs (sqlite3)
-  - Test sidekiq confirmation email is sent (with deliver_later!)
 * Add comments to posts (allow markdown, and code)
   - Make them need to be approved
-* Add better styling using tailwind
-    - Read about tailwind components I can use, maybe blog templates or something
-* Add errors table for logging errors
+
+Long-term:
+  * Add errors table for logging errors
+  * Switch to postgres
 
 Other:
 
 * Why is image attachment url a redirect url? []
-* Add top menu and about page
-* Fix Nokogiri::XML adding closing tags to <img>
-* Create post versions?, or last_edited and only update
-when a non-whitespace change has been made
-* Copy editor images over to our site
 * Host own fontawesome using npm and flag-icons too
 * Fix favicons
- 
-* Look into making some posts and publishing the blog with kamal and containers
-
-Dev Environment:
