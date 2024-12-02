@@ -294,7 +294,7 @@ main {
 }
 
 #navbar-menu {
-  position: fixed;
+  position: absolute;
   top: var(--navbar-height);
   bottom: 0;
   opacity: 0;
@@ -316,8 +316,7 @@ main {
   align-items: center;
   left: 0;
   right: 0;
-  margin: 1.4rem;
-  border-radius: 5px;
+  margin: 0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
