@@ -77,6 +77,7 @@ class EmailSubscription < ApplicationRecord
     end
     begin
       Timeout.timeout(inline_timeout) do
+        # NOTE: this call has its own timeout in Net::OpenTimeout
         SubscriptionConfirmationMailer.with(
           sub_id: sub_id
         ).confirmation_email.deliver!

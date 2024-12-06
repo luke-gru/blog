@@ -80,12 +80,29 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: "luke-gru.net" }
-  config.action_mailer.default_options = { from: 'no-reply@luke-gru.net' }
-  config.action_mailer.asset_host = "https://luke-gru.net"
-
-  config.action_mailer.delivery_method = :sendmail # using postfix
+  config.action_mailer.default_options = {
+    from: "noreply.lukegru.net",
+    charset: "utf-8",
+  }
   config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { host: "luke-gru.net" }
+  config.action_mailer.asset_host = "https://luke-gru.net"
+  # SMTP settings for gmail
+  if ENV["LUKEGRU_GMAIL_PASS"].blank? && ENV["SECRET_KEY_BASE_DUMMY"].blank?
+    msg = "missing LUKEGRU_GMAIL_PASS"
+    $stderr.puts msg
+    raise msg
+  end
+  config.action_mailer.smtp_settings = {
+    :address              => "smtp.gmail.com",
+    :port                 => 587,
+    :authentication       => "plain",
+    :enable_starttls_auto => true,
+    :user_name            => "noreply.lukegru.net",
+    :password             => ENV["LUKEGRU_GMAIL_PASS"],
+  }
+
+  config.action_mailer.delivery_method = :smtp
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true

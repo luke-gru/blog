@@ -372,6 +372,9 @@ footer {
   #email-subscribe-container {
     height: 100%;
     color: var(--navbar-text-color);
+    input[type=email] {
+      color: black;
+    }
   }
   #email-subscribe-text {
     padding-bottom: 10px;

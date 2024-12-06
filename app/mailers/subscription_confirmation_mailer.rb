@@ -17,6 +17,7 @@ class SubscriptionConfirmationMailer < ApplicationMailer
     end
     email = sub.email
 
-    mail(to: email, subject: "Confirm your email")
+    # TODO: translate subject
+    mail(to: email, subject: "Please confirm your email")
   end
 end

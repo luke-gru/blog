@@ -122,18 +122,21 @@ class PostsController < ApplicationController
     token = params[:token].presence
     unless token
       logger.info "Empty token"
+      # TODO: translate
       flash[:error] = "Invalid token."
       redirect_to(posts_page_path) and return
     end
     sub = EmailSubscription.where(confirmation_token: token).last
     unless sub
       logger.info "No sub with this token"
+      # TODO: translate
       flash[:error] = "Cannot find a subscription with this token."
       redirect_to(posts_page_path) and return
     end
     sub.confirm!
     logger.info "Confirmation success"
-    flash[:notice] = "Confirmation success."
+    # TODO: translate
+    flash[:notice] = "Confirmation success. Thank you for your support!"
     redirect_to(posts_page_path) and return
   end
 
